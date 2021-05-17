@@ -9,3 +9,4 @@ add_executable(bookmarkmanager main.cpp)
 
 add_executable(bookmark_tests tests/test_runner.cc tests/test_argh.cc)
 target_include_directories(bookmark_tests PRIVATE ${PROJECT_SOURCE_DIR}/doctest)
+target_include_directories(bookmark_tests PRIVATE ${PROJECT_SOURCE_DIR}/argh)

@@ -1,4 +1,5 @@
 add_library(booklib STATIC markdown_collection.cc commandlineparser.cc)
+target_include_directories(booklib PRIVATE ${PROJECT_SOURCE_DIR}/argh)
 target_include_directories(booklib PUBLIC .)
 
 #set_property(

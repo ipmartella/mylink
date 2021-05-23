@@ -1,4 +1,5 @@
 #include "commandlineparser.hpp"
+#include "argh.h"
 #include <stdexcept>
 
 using namespace mylink;
@@ -18,9 +19,14 @@ void CommandLineParser::parse(int argc, const char **argv)
         return;
     }
 
-    const std::string command{argv[1]};
+    argh::parser argh_parser;
+    argh_parser.parse(argc, argv);
+
+    const std::string command{argh_parser[1]};
     if(command == "add") {
-        return;
+        if(!argh_parser(3)) {
+            out_stream_ << commandline_add_usage();
+        }
     } else {
         out_stream_ << commandline_usage();
     }
@@ -28,4 +34,8 @@ void CommandLineParser::parse(int argc, const char **argv)
 
 std::string mylink::commandline_usage() {
     return "USAGE\n";
+}
+
+std::string mylink::commandline_add_usage() {
+    return "ADD USAGE\n";
 }

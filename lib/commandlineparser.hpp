@@ -18,6 +18,7 @@ private:
 };
 
 std::string commandline_usage();
+std::string commandline_add_usage();
 
 } //namespace mylink
 

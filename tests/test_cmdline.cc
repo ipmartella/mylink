@@ -25,7 +25,7 @@ public:
     std::string get_stdout() { return stdout_.str(); }
     MockCollection& collection() { return collection_; }
     void parse(int argc, const char **argv) { parser_.parse(argc, argv); }
-    void parse(const std::vector<std::string> args) {
+    void parse(const std::vector<std::string> &args) {
         const int ARGC = args.size();
         const char* ARGV[ARGC];
         for(size_t i = 0; i < args.size(); ++i) {
@@ -34,49 +34,64 @@ public:
         parser_.parse(ARGC, ARGV);
     }
 
+    void parse_command_and_args(const std::vector<std::string> &command_and_args) {
+        std::vector<std::string> actual_args {"mylink"};
+        actual_args.insert(actual_args.end(), command_and_args.begin(), command_and_args.end());
+        parse(actual_args);
+    }
+
 private:
     MockCollection collection_;
     std::stringstream stdout_;
     CommandLineParser parser_;
 };
 
-
 SCENARIO("Invalid command line")
 {
-    TestParser parser;
+    GIVEN("A parser") {
+        TestParser parser;
 
-    GIVEN("argc == 0") {
-        int argc = 0;
-        const char **argv = nullptr;
+        WHEN("argc == 0") {
+            int argc = 0;
+            const char **argv = nullptr;
 
-        WHEN("The parser is called") {
             THEN("An exception is thrown") {
                 CHECK_THROWS_AS(parser.parse(argc, argv), std::invalid_argument);
             }
         }
-    }
 
-    GIVEN("argc == 1") {
-        std::vector<std::string> args = {"mylink"};
-
-        WHEN("The parser is called") {
+        WHEN("It's called without arguments") {
+            std::vector<std::string> args = {"mylink"};
             parser.parse(args);
 
             THEN("The usage string is printed") {
                 CHECK_EQ(parser.get_stdout(), commandline_usage());
             }
         }
-    }
 
-    GIVEN("A non-existing command") {
-        std::vector<std::string> args = {"mylink", "nope"};
-
-        WHEN("The parser is called") {
-            parser.parse(args);
+        WHEN("It's called with a non-existing command") {
+            parser.parse_command_and_args({"nope"});
 
             THEN("The usage string is printed") {
                 CHECK_EQ(parser.get_stdout(), commandline_usage());
+            }
+        }
+
+    }
+}
+
+SCENARIO("Add command")
+{
+    GIVEN("A parser") {
+        TestParser parser;
+
+        WHEN("It's called with 'add'") {
+            parser.parse_command_and_args({"add"});
+
+            THEN("The usage string for add is printed") {
+                CHECK_EQ(parser.get_stdout(), commandline_add_usage());
             }
         }
     }
 }
+

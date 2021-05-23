@@ -1,4 +1,4 @@
-#include "commandlineparser.hpp"
+#include <commandlineparser.h>
 #include <argh.h>
 #include <stdexcept>
 #include <map>

@@ -1,7 +1,7 @@
 #ifndef COMMANDLINEPARSER_HPP
 #define COMMANDLINEPARSER_HPP
 
-#include <collection.hpp>
+#include <collection.h>
 #include <iostream>
 
 namespace mylink {

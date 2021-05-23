@@ -1,7 +1,7 @@
 #ifndef COLLECTION_HPP
 #define COLLECTION_HPP
 
-#include "bookmark.hpp"
+#include "bookmark.h"
 #include <vector>
 
 namespace mylink {

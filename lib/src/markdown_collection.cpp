@@ -1,4 +1,4 @@
-#include "markdown_collection.hpp"
+#include <markdown_collection.h>
 
 using namespace mylink;
 

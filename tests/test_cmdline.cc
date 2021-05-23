@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "commandlineparser.hpp"
+#include <commandlineparser.h>
 #include <stdexcept>
 #include <sstream>
 

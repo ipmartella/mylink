@@ -2,7 +2,7 @@
 #define MARKDOWNCOLLECTION_HPP
 #include <vector>
 #include <string>
-#include "collection.hpp"
+#include <collection.h>
 
 namespace mylink {
 

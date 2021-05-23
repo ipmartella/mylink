@@ -1,5 +1,5 @@
 #include "commandlineparser.hpp"
-#include "argh.h"
+#include <argh.h>
 #include <stdexcept>
 #include <map>
 #include <functional>
@@ -11,10 +11,7 @@ public:
     invalid_command() : std::logic_error{"Invalid syntax"} {};
 };
 
-CommandLineParser::CommandLineParser(Collection &collection) : CommandLineParser(collection, std::cout)
-{}
-
-CommandLineParser::CommandLineParser(Collection &collection, std::ostream &stdout) : collection_(collection), out_stream_(stdout)
+CommandLineParser::CommandLineParser(Collection &collection, std::ostream &stdout = std::cout) : collection_(collection), out_stream_(stdout)
 {}
 
 void throw_if_impossible_arguments(int argc, const char**) {
@@ -36,9 +33,9 @@ argh::parser parse_command_line(int argc, const char **argv) {
 }
 
 std::string extract_action(const argh::parser& command_line) {
-    constexpr size_t ACTION_INDEX = 1;
-    if(command_line(ACTION_INDEX)){
-        return command_line[ACTION_INDEX];
+    constexpr size_t index_for_action = 1;
+    if(command_line(index_for_action)){
+        return command_line[index_for_action];
     } else {
         throw invalid_command{};
     }
@@ -48,9 +45,9 @@ std::string extract_action(const argh::parser& command_line) {
 using ActionParser = std::function<void(const argh::parser&, Collection&, std::ostream&)>;
 
 std::string extract_url(const argh::parser &command_line){
-    constexpr size_t INDEX_URL = 2;
-    if(command_line(INDEX_URL)) {
-        return command_line[INDEX_URL];
+    constexpr size_t index_for_url = 2;
+    if(command_line(index_for_url)) {
+        return command_line[index_for_url];
     } else {
         throw invalid_command{};
     }
@@ -68,7 +65,7 @@ void parse_add_command(const argh::parser &command_line,
 }
 
 
-const std::map<std::string, ActionParser> _ACTION_PARSERS = {
+const std::map<std::string, ActionParser> sActionParsers = {
     {"add", parse_add_command}
 };
 
@@ -82,7 +79,7 @@ void CommandLineParser::parse(int argc, const char **argv)
         auto action = extract_action(command_line);
 
         try {
-            auto parser_for_action = _ACTION_PARSERS.at(action);
+            auto parser_for_action = sActionParsers.at(action);
             parser_for_action(command_line, collection_, out_stream_);
         }  catch (std::out_of_range ex) {
             throw invalid_command{};

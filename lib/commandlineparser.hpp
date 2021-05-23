@@ -10,7 +10,7 @@ class CommandLineParser
 public:
     CommandLineParser(Collection& collection);
     CommandLineParser(Collection& collection, std::ostream& stdout);
-    void parse(int argc, char** argv);
+    void parse(int argc, const char** argv);
 
 private:
     Collection& collection_;

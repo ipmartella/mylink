@@ -24,7 +24,15 @@ public:
     TestParser() : collection_{}, stdout_{}, parser_{collection_, stdout_} {}
     std::string get_stdout() { return stdout_.str(); }
     MockCollection& collection() { return collection_; }
-    void parse(int argc, char **argv) { parser_.parse(argc, argv); }
+    void parse(int argc, const char **argv) { parser_.parse(argc, argv); }
+    void parse(const std::vector<std::string> args) {
+        const int ARGC = args.size();
+        const char* ARGV[ARGC];
+        for(size_t i = 0; i < args.size(); ++i) {
+            ARGV[i] = args[i].c_str();
+        }
+        parser_.parse(ARGC, ARGV);
+    }
 
 private:
     MockCollection collection_;
@@ -35,13 +43,13 @@ private:
 
 SCENARIO("Invalid command line")
 {
+    TestParser parser;
+
     GIVEN("argc == 0") {
         int argc = 0;
-        char **argv = nullptr;
+        const char **argv = nullptr;
 
         WHEN("The parser is called") {
-            TestParser parser;
-
             THEN("An exception is thrown") {
                 CHECK_THROWS_AS(parser.parse(argc, argv), std::invalid_argument);
             }
@@ -49,12 +57,22 @@ SCENARIO("Invalid command line")
     }
 
     GIVEN("argc == 1") {
-        int argc = 1;
-        char **argv = nullptr;
+        std::vector<std::string> args = {"mylink"};
 
         WHEN("The parser is called") {
-            TestParser parser;
-            parser.parse(argc, argv);
+            parser.parse(args);
+
+            THEN("The usage string is printed") {
+                CHECK_EQ(parser.get_stdout(), commandline_usage());
+            }
+        }
+    }
+
+    GIVEN("A non-existing command") {
+        std::vector<std::string> args = {"mylink", "nope"};
+
+        WHEN("The parser is called") {
+            parser.parse(args);
 
             THEN("The usage string is printed") {
                 CHECK_EQ(parser.get_stdout(), commandline_usage());

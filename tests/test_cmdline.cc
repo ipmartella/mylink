@@ -7,7 +7,7 @@ using namespace mylink;
 
 class MockCollection : public Collection {
 public:
-    void add(const Bookmark bookmark) override {
+    virtual void add(const Bookmark bookmark) override {
         add_calls_.push_back(bookmark);
     }
 
@@ -90,6 +90,14 @@ SCENARIO("Add command")
 
             THEN("The usage string for add is printed") {
                 CHECK_EQ(parser.get_stdout(), commandline_add_usage());
+            }
+        }
+
+        WHEN("It's called with 'add <url>'") {
+            parser.parse_command_and_args({"add", "https://wikipedia.org"});
+
+            THEN("Collection.Add is called with <url>") {
+                CHECK_EQ(parser.collection().readAddCalls()[0].url, "https://wikipedia.org");
             }
         }
     }

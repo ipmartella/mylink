@@ -24,9 +24,12 @@ void CommandLineParser::parse(int argc, const char **argv)
 
     const std::string command{argh_parser[1]};
     if(command == "add") {
-        if(!argh_parser(3)) {
+        if(!argh_parser(2)) {
             out_stream_ << commandline_add_usage();
+            return;
         }
+        const std::string url = argh_parser[2];
+        collection_.add(Bookmark{url});
     } else {
         out_stream_ << commandline_usage();
     }

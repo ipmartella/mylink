@@ -19,7 +19,7 @@ std::string extract_url(const ParsedCommandLine& command_line)
 
 } //namespace
 
-void mylink::impl::parse_add_command(const ParsedCommandLine& command_line,
+void mylink::impl::execute_run_command(const ParsedCommandLine& command_line,
                                      Collection& collection,
                                      std::ostream& out_stream)
 {

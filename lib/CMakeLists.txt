@@ -1,9 +1,9 @@
 add_library(booklib STATIC
-    src/markdown_collection.cpp
     src/commandlineparser.cpp
     src/command_line_usage.cpp
     src/command_line_action_add.cpp
     src/command_line_parsing.cpp
+    src/stored_collection.cpp
     )
 target_include_directories(booklib PRIVATE ${PROJECT_SOURCE_DIR}/argh)
 target_include_directories(booklib PUBLIC include)

@@ -11,9 +11,7 @@ public:
         add_calls_.push_back(bookmark);
     }
 
-    const std::vector<Bookmark>& readAddCalls() {
-        return add_calls_;
-    }
+    const std::vector<Bookmark>& readAddCalls() { return add_calls_; }
 
 private:
     std::vector<Bookmark> add_calls_;

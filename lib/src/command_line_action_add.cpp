@@ -7,10 +7,11 @@ using namespace mylink::impl;
 
 namespace {
 
-std::string extract_url(const argh::parser &command_line){
+std::string extract_url(const ParsedCommandLine& command_line)
+{
     constexpr size_t index_for_url = 2;
-    if(command_line(index_for_url)) {
-        return command_line[index_for_url];
+    if (command_line.hasPositional(index_for_url)) {
+        return command_line.getPositional(index_for_url);
     } else {
         throw invalid_command{};
     }
@@ -18,13 +19,18 @@ std::string extract_url(const argh::parser &command_line){
 
 } //namespace
 
-void parse_add_command(const argh::parser &command_line,
-                       Collection& collection,
-                       std::ostream& out_stream) {
+void mylink::impl::parse_add_command(const ParsedCommandLine& command_line,
+                                     Collection& collection,
+                                     std::ostream& out_stream)
+{
     try {
         auto url = extract_url(command_line);
         collection.add(url);
     }  catch (invalid_command ex) {
         out_stream << commandline_add_usage();
     }
+}
+
+std::string mylink::commandline_add_usage() {
+    return "ADD USAGE\n";
 }

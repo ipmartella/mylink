@@ -16,6 +16,14 @@ struct TestCollection {
         }
         return false;
     }
+    bool containsBookmarks(std::vector<Bookmark> targets) const {
+        for(const auto& bookmark : targets) {
+            if(!containsBookmark(bookmark)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     RamStorage storage;
     StoredCollection collection;
@@ -28,7 +36,7 @@ SCENARIO("Add bookmark to collection") {
         TestCollection test_collection;
 
         WHEN("I add a bookmark") {
-            Bookmark new_bookmark{"http://www.wikipedia.org"};
+            Bookmark new_bookmark{"https://www.wikipedia.org"};
             test_collection.collection.add(new_bookmark);
 
             THEN("The collection contains only the new bookmark") {
@@ -37,14 +45,28 @@ SCENARIO("Add bookmark to collection") {
             }
         }
     }
-}
 
-TEST_CASE("Add a new link, to an existing collection") {
-    //Given: an existing collection
+    GIVEN("An existing collection") {
+        std::vector<Bookmark> existing_bookmarks {
+            Bookmark{"https://www.wikipedia.org"},
+            Bookmark{"https://en.cppreference.com"}
+        };
 
-    //When: I add a new link
+        TestCollection test_collection{existing_bookmarks};
 
-    //Then: The link is added to the collection
+        WHEN("I add a new bookmark") {
+            Bookmark new_bookmark{"https://isocpp.github.io/"};
+            test_collection.collection.add(new_bookmark);
+
+            THEN("The collection contains new bookmark and the old ones") {
+                CHECK_EQ(test_collection.size(), existing_bookmarks.size() + 1);
+                CHECK(test_collection.containsBookmark(new_bookmark));
+            }
+
+        }
+
+    }
+
 }
 
 TEST_CASE("Add an existing link to a collection") {

@@ -6,7 +6,7 @@ namespace {
 bool bookmark_in_collection(const Bookmark& target, const std::vector<Bookmark>& bookmarks)
 {
     for (const auto& bookmark : bookmarks) {
-        if (bookmark.url() == target.url()) {
+        if (bookmark.same_url_as(target)) {
             return true;
         }
     }

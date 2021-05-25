@@ -11,7 +11,7 @@ struct TestCollection {
     bool contains_bookmark(Bookmark target) const
     {
         for(const auto& bookmark : storage.data() ) {
-            if(bookmark.url() == target.url()) {
+            if(bookmark.same_url_as(target)){
                 return true;
             }
         }

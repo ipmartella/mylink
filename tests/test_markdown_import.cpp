@@ -9,7 +9,7 @@ void line_is_parsed_but_no_result(const std::string& line)
 {
     INFO("Line:<", line, ">");
     auto bookmark = parse_markdown_line(line);
-    CHECK_EQ(bookmark.url(), INVALID_BOOKMARK.url());
+    CHECK(bookmark.same_url_as(INVALID_BOOKMARK));
 }
 
 void line_is_parsed_with_url(const std::string& line, const std::string& expected_url) {

@@ -6,6 +6,7 @@ add_library(booklib STATIC
     src/stored_collection.cpp
     src/markdown_import.cpp
     src/markdown_export.cpp
+    src/bookmark.cpp
     )
 target_include_directories(booklib PRIVATE ${PROJECT_SOURCE_DIR}/argh)
 target_include_directories(booklib PUBLIC include)

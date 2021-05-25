@@ -95,7 +95,7 @@ SCENARIO("Add command")
             parser.parse_command_and_args({"add", "https://wikipedia.org"});
 
             THEN("Collection.Add is called with <url>") {
-                CHECK_EQ(parser.collection().readAddCalls()[0].url, "https://wikipedia.org");
+                CHECK_EQ(parser.collection().readAddCalls()[0].url(), "https://wikipedia.org");
             }
         }
     }

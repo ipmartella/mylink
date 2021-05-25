@@ -5,6 +5,7 @@ add_executable(bookmark_tests
     test_cmdline.cc
     test_markdown_import.cpp
     test_markdown_export.cpp
+    test_bookmark.cpp
     utils/ram_storage.cpp
     )
 target_include_directories(bookmark_tests PRIVATE ${PROJECT_SOURCE_DIR}/doctest)

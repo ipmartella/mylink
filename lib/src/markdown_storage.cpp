@@ -8,7 +8,7 @@ using namespace mylink;
 
 namespace {
 
-const std::regex regexp_simple(R"(^\s*-\s*(\S+)\s*$)");
+const std::regex regexp_simple(R"(^\s*[\*-]\s*(\S+)\s*$)");
 
 Bookmark matches(const std::string& line) {
     std::smatch match;

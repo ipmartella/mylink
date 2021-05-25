@@ -42,6 +42,7 @@ SCENARIO("Covert Markdown to bookmark")
         std::vector<std::string> empty_lines = {
             "- https://www.wikipedia.org",
             " - https://www.wikipedia.org  ",
+            "  \t - \thttps://www.wikipedia.org  ",
             "\t-https://www.wikipedia.org",
             "-https://www.wikipedia.org\r\n",
             "-https://www.wikipedia.org \n",
@@ -56,6 +57,7 @@ SCENARIO("Covert Markdown to bookmark")
         std::vector<std::string> empty_lines = {
             "* https://www.wikipedia.org",
             " * https://www.wikipedia.org  ",
+            "  \t * \thttps://www.wikipedia.org  ",
             "\t*https://www.wikipedia.org",
             "*https://www.wikipedia.org\r\n",
             "*https://www.wikipedia.org \n",

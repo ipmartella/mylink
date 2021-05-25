@@ -34,3 +34,11 @@ Bookmark::Bookmark(const std::string& url) : url_{trim_url(url)} {
 const std::string& Bookmark::url() const {
     return url_;
 }
+
+bool Bookmark::same_url_as(const Bookmark &other) const {
+    return std::equal(url_.begin(), url_.end(),
+                      other.url().begin(), other.url().end(),
+                      [](char a, char b){ return std::tolower(a) == std::tolower(b); }
+                      );
+
+}

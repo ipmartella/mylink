@@ -45,3 +45,36 @@ SCENARIO("Create a bookmark from a URL") {
         }
     }
 }
+
+SCENARIO("Check that two Bookmarks are the same") {
+    GIVEN("Two bookmarks with different URLs") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://en.cppreference.org"};
+
+        WHEN("They are compared") {
+            THEN("They should be marked as not-equal") {
+                CHECK_FALSE(bookmark1.same_url_as(bookmark2));
+            }
+        }
+    }
+    GIVEN("Two bookmarks with the same URL (case sensitive)") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://www.wikipedia.org"};
+
+        WHEN("They are compared") {
+            THEN("They should be marked as equal") {
+                CHECK(bookmark1.same_url_as(bookmark2));
+                CHECK(bookmark1.same_url_as(bookmark1));
+            }
+        }
+    }
+    GIVEN("Two bookmarks with the same URL (case insensitive)") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://wWw.WIKIpedia.org"};
+        WHEN("They are compared") {
+            THEN("They should be marked as equal") {
+                CHECK(bookmark1.same_url_as(bookmark2));
+            }
+        }
+    }
+}

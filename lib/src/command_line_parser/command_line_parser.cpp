@@ -1,10 +1,11 @@
-#include "command_line_action_add.h"
-#include "command_line_parsing.h"
-#include "private_exceptions.h"
 #include <commandlineparser.h>
 #include <functional>
 #include <map>
 #include <stdexcept>
+
+#include "../private_exceptions.h"
+#include "parser_impl.h"
+#include "action_add.h"
 
 using namespace mylink;
 using namespace mylink::impl;
@@ -63,4 +64,7 @@ void CommandLineParser::parse(int argc, const char **argv)
     }
 }
 
+std::string mylink::commandline_usage() {
+    return "USAGE\n";
+}
 

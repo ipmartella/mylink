@@ -42,3 +42,15 @@ bool Bookmark::same_url_as(const Bookmark &other) const {
                       );
 
 }
+
+
+#ifdef MYLINK_TEST_IN_CODE
+#include <doctest.h>
+
+TEST_CASE("Trim url tests") {
+    CHECK_EQ(trim_url(" https://www.wikipedia.org"), "https://www.wikipedia.org");
+    CHECK_EQ(trim_url("https://www.wikipedia.org "), "https://www.wikipedia.org");
+    CHECK_EQ(trim_url("\t https://www.wikipedia.org \r\n"), "https://www.wikipedia.org");
+}
+
+#endif

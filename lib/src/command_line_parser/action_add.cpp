@@ -1,6 +1,6 @@
-#include "command_line_action_add.h"
-#include "private_exceptions.h"
-#include "commandlineparser.h"
+#include "action_add.h"
+#include "../private_exceptions.h"
+#include <commandlineparser.h>
 
 using namespace mylink;
 using namespace mylink::impl;

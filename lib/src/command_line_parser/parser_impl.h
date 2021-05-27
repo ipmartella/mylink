@@ -1,5 +1,5 @@
-#ifndef COMMAND_LINE_PARSING_H
-#define COMMAND_LINE_PARSING_H
+#ifndef PARSER_IMPL_H
+#define PARSER_IMPL_H
 
 #include <memory>
 #include <string>
@@ -26,4 +26,4 @@ private:
 } //namespace impl
 } //namespace mylink
 
-#endif // COMMAND_LINE_PARSING_H
+#endif // PARSER_IMPL_H

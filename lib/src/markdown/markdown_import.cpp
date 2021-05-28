@@ -21,7 +21,7 @@ private:
     std::string target_;
 };
 
-const std::regex regexp_simple(R"(^\s*[\*-]\s*([a-zA-Z\/]\S*)\s*$)");
+const std::regex regexp_simple(R"(^\s*[\*-]\s*(\S+)\s*$)");
 
 Bookmark convert_plain_url_list_item_to_bookmark(const std::string& line) {
     std::smatch match;
@@ -38,6 +38,8 @@ Bookmark mylink::parse_markdown_line(const std::string& line) {
     try {
         return convert_plain_url_list_item_to_bookmark(line);
     }  catch (no_match_found) {
+        return INVALID_BOOKMARK;
+    } catch(std::invalid_argument) {
         return INVALID_BOOKMARK;
     }
 }

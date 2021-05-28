@@ -15,8 +15,16 @@ void throw_if_url_is_empty(const std::string& url) {
     }
 }
 
+void throw_if_invalid_format(const std::string& input_url) {
+    static std::regex url_starts_with_protocol_or_slash(R"(^(([a-zA-z]+:)|\/)\S*$)");
+    std::smatch match;
+    if(!std::regex_match(input_url, match, url_starts_with_protocol_or_slash)) {
+        throw std::invalid_argument("URL must start with a protocol (like http://) or with a /");
+    }
+}
+
 std::string trim_url(const std::string& input_url) {
-    std::regex trim_url_regex(R"(^\s*(\S*)\s*$)");
+    static std::regex trim_url_regex(R"(^\s*(\S*)\s*$)");
     std::smatch match;
     std::regex_match(input_url, match, trim_url_regex);
     return match[1];
@@ -29,6 +37,7 @@ std::string trim_url(const std::string& input_url) {
 
 Bookmark::Bookmark(const std::string& url) : url_{trim_url(url)} {
     throw_if_url_is_empty(url_);
+    throw_if_invalid_format(url_);
 }
 
 const std::string& Bookmark::get_url() const {

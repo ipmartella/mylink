@@ -44,6 +44,19 @@ SCENARIO("Create a bookmark from a URL") {
             bookmark_is_created_with_url(url, actual_url);
         }
     }
+
+    GIVEN("An invalid URL") {
+        std::vector<std::string> invalid_urls = {
+            "_INVALID_",
+            "pippo",
+            "**********************",
+            "- --------------------- -"
+        };
+
+        for (const auto& url : invalid_urls) {
+            bookmark_cannot_be_created_with_url(url);
+        }
+    }
 }
 
 SCENARIO("Check that two Bookmarks are the same") {

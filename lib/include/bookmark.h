@@ -14,6 +14,8 @@ private:
     std::string url_;
 };
 
+const Bookmark INVALID_BOOKMARK{"invalid://nope"};
+
 } //namespace mylink
 
 

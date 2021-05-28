@@ -7,7 +7,7 @@ namespace mylink {
 struct Bookmark {
 public:
     Bookmark(const std::string& url);
-    const std::string& url() const;
+    const std::string& get_url() const;
     bool same_url_as(const Bookmark& other) const;
 
 private:

@@ -73,7 +73,7 @@ namespace {
     void line_is_parsed_with_url(const std::string& line, const std::string& expected_url) {
         INFO("Line:<", line, ">");
         auto bookmark = parse_markdown_line(line);
-        CHECK_EQ(bookmark.url(), expected_url);
+        CHECK_EQ(bookmark.get_url(), expected_url);
     }
 } //namespace
 
@@ -154,9 +154,9 @@ SCENARIO("Convert Markdown stream to Bookmarks") {
 
             THEN("The bookmarks are read") {
                 CHECK_EQ(bookmarks.size(), 3);
-                CHECK_EQ(bookmarks[0].url(), ("https://www.wikipedia.org"));
-                CHECK_EQ(bookmarks[1].url(), ("https://www.github.org"));
-                CHECK_EQ(bookmarks[2].url(), ("https://www.myurl.com/index/test"));
+                CHECK_EQ(bookmarks[0].get_url(), ("https://www.wikipedia.org"));
+                CHECK_EQ(bookmarks[1].get_url(), ("https://www.github.org"));
+                CHECK_EQ(bookmarks[2].get_url(), ("https://www.myurl.com/index/test"));
             }
         }
     }
@@ -177,9 +177,9 @@ SCENARIO("Convert Markdown stream to Bookmarks") {
 
             THEN("The bookmarks are read") {
                 CHECK_EQ(bookmarks.size(), 3);
-                CHECK_EQ(bookmarks[0].url(), ("https://www.wikipedia.org"));
-                CHECK_EQ(bookmarks[1].url(), ("https://www.github.org"));
-                CHECK_EQ(bookmarks[2].url(), ("https://www.myurl.com/index/test"));
+                CHECK_EQ(bookmarks[0].get_url(), ("https://www.wikipedia.org"));
+                CHECK_EQ(bookmarks[1].get_url(), ("https://www.github.org"));
+                CHECK_EQ(bookmarks[2].get_url(), ("https://www.myurl.com/index/test"));
             }
         }
     }

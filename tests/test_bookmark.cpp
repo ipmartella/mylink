@@ -16,7 +16,7 @@ void bookmark_cannot_be_created_with_url(const std::string& url) {
 void bookmark_is_created_with_url(const std::string& url, const std::string& actual_url) {
     INFO("URL is \"", url, "\"");
     Bookmark bookmark{url};
-    CHECK_EQ(bookmark.url(), actual_url);
+    CHECK_EQ(bookmark.get_url(), actual_url);
 }
 
 } //namespace

@@ -31,13 +31,13 @@ Bookmark::Bookmark(const std::string& url) : url_{trim_url(url)} {
     throw_if_url_is_empty(url_);
 }
 
-const std::string& Bookmark::url() const {
+const std::string& Bookmark::get_url() const {
     return url_;
 }
 
 bool Bookmark::same_url_as(const Bookmark &other) const {
     return std::equal(url_.begin(), url_.end(),
-                      other.url().begin(), other.url().end(),
+                      other.get_url().begin(), other.get_url().end(),
                       [](char a, char b){ return std::tolower(a) == std::tolower(b); }
                       );
 

@@ -21,7 +21,7 @@ private:
     std::string target_;
 };
 
-const std::regex regexp_simple(R"(^\s*[\*-]\s*(\S+)\s*$)");
+const std::regex regexp_simple(R"(^\s*[\*-]\s*([a-zA-Z\/]\S*)\s*$)");
 
 Bookmark convert_plain_url_list_item_to_bookmark(const std::string& line) {
     std::smatch match;
@@ -42,10 +42,24 @@ Bookmark mylink::parse_markdown_line(const std::string& line) {
     }
 }
 
+std::vector<Bookmark> mylink::read_bookmarks_from_stream(std::istream& stream) {
+    std::vector<Bookmark> bookmarks;
+    std::string line;
+    while(std::getline(stream, line, '\n')) {
+        auto new_bookmark = parse_markdown_line(line);
+        if(!new_bookmark.same_url_as(INVALID_BOOKMARK)) {
+            bookmarks.push_back(new_bookmark);
+        }
+    }
+
+    return bookmarks;
+}
+
 #ifdef MYLINK_TEST_IN_CODE
 #include <doctest.h>
 #include <string>
 #include <vector>
+#include <sstream>
 
 
 namespace {
@@ -101,6 +115,72 @@ SCENARIO("Covert Markdown to bookmark")
 
         for (const auto& line : empty_lines) {
             line_is_parsed_with_url(line, "https://www.wikipedia.org");
+        }
+    }
+
+    GIVEN("A line with only dashes ----------------") {
+        std::vector<std::string> empty_lines = {
+            "-----------------------",
+            " - ------------------",
+        };
+
+        for (const auto& line : empty_lines) {
+            line_is_parsed_but_no_result(line);
+        }
+    }
+}
+
+SCENARIO("Convert Markdown stream to Bookmarks") {
+    GIVEN("A empty stream") {
+        std::stringstream stream;
+
+        WHEN("The stream is read") {
+            auto bookmarks = read_bookmarks_from_stream(stream);
+
+            THEN("No bookmarks are returned") {
+                CHECK_EQ(bookmarks.size(), 0);
+            }
+        }
+    }
+
+    GIVEN("A stream of Bookmarks") {
+        std::stringstream stream;
+        stream << "- https://www.wikipedia.org\n";
+        stream << "* https://www.github.org\r\n";
+        stream << "- https://www.myurl.com/index/test";
+
+        WHEN("The stream is read") {
+            auto bookmarks = read_bookmarks_from_stream(stream);
+
+            THEN("The bookmarks are read") {
+                CHECK_EQ(bookmarks.size(), 3);
+                CHECK_EQ(bookmarks[0].url(), ("https://www.wikipedia.org"));
+                CHECK_EQ(bookmarks[1].url(), ("https://www.github.org"));
+                CHECK_EQ(bookmarks[2].url(), ("https://www.myurl.com/index/test"));
+            }
+        }
+    }
+
+    GIVEN("A stream of Bookmarks, containing also spurious lines") {
+        std::stringstream stream;
+        stream << "# First article\n";
+        stream << "- https://www.wikipedia.org\n";
+        stream << "My useless comment\n";
+        stream << "\n";
+        stream << "* https://www.github.org\r\n";
+        stream << " -----------------\n";
+        stream << " * ************** *\n";
+        stream << "- https://www.myurl.com/index/test";
+
+        WHEN("The stream is read") {
+            auto bookmarks = read_bookmarks_from_stream(stream);
+
+            THEN("The bookmarks are read") {
+                CHECK_EQ(bookmarks.size(), 3);
+                CHECK_EQ(bookmarks[0].url(), ("https://www.wikipedia.org"));
+                CHECK_EQ(bookmarks[1].url(), ("https://www.github.org"));
+                CHECK_EQ(bookmarks[2].url(), ("https://www.myurl.com/index/test"));
+            }
         }
     }
 }

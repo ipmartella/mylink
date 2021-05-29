@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 add_subdirectory(lib)
-add_subdirectory(doctest)
-add_subdirectory(argh)
+add_subdirectory(ext)
 add_subdirectory(cli)
+add_subdirectory(server)
 add_subdirectory(tests)
 

@@ -1,0 +1,1 @@
+javascript:(function() { var request = { url: window.location.href, title: document.title }; window.fetch("http://localhost:1234/add_bookmark", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request) }).then(risposta => { if (!risposta.ok) { console.log("Fallito"); } }); })();

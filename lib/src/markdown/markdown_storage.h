@@ -7,11 +7,8 @@
 
 namespace mylink {
 
-Bookmark parse_markdown_line(const std::string& line);
-std::string convert_to_markdown_line(const Bookmark& bookmark);
-
-std::vector<Bookmark> read_bookmarks_from_stream(std::istream &markdown_stream);
-void write_bookmarks_to_stream(const std::vector<Bookmark>& bookmarks, std::ostream& markdown_stream);
+std::vector<Bookmark> read_bookmarks_from_file(const std::string& filename);
+void write_bookmarks_to_file(const std::vector<Bookmark>& bookmarks, const std::string& filename);
 
 
 } // namespace mylink

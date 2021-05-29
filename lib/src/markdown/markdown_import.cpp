@@ -3,6 +3,7 @@
 #include <string>
 #include <regex>
 #include <stdexcept>
+#include <fstream>
 
 using namespace mylink;
 
@@ -32,9 +33,7 @@ Bookmark convert_plain_url_list_item_to_bookmark(const std::string& line) {
     }
 }
 
-} //namespace
-
-Bookmark mylink::parse_markdown_line(const std::string& line) {
+Bookmark parse_markdown_line(const std::string& line) {
     try {
         return convert_plain_url_list_item_to_bookmark(line);
     }  catch (no_match_found) {
@@ -44,9 +43,7 @@ Bookmark mylink::parse_markdown_line(const std::string& line) {
     }
 }
 
-std::vector<Bookmark> mylink::read_bookmarks_from_stream(std::istream& stream) {
-    stream.clear();
-    stream.seekg(0);
+std::vector<Bookmark> read_bookmarks_from_stream(std::istream& stream) {
     std::vector<Bookmark> bookmarks;
     std::string line;
     while(std::getline(stream, line, '\n')) {
@@ -58,6 +55,16 @@ std::vector<Bookmark> mylink::read_bookmarks_from_stream(std::istream& stream) {
 
     return bookmarks;
 }
+
+} //namespace
+
+
+std::vector<Bookmark> mylink::read_bookmarks_from_file(const std::string& filename) {
+    std::ifstream stream{filename};
+    return read_bookmarks_from_stream(stream);
+}
+
+
 
 #ifdef MYLINK_TEST_IN_CODE
 #include <doctest.h>

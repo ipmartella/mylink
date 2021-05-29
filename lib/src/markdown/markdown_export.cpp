@@ -1,22 +1,29 @@
 #include "markdown_storage.h"
 #include <sstream>
+#include <fstream>
 
 using namespace mylink;
 
-std::string mylink::convert_to_markdown_line(const Bookmark& bookmark) {
+namespace {
+
+std::string convert_to_markdown_line(const Bookmark& bookmark) {
     std::stringstream markdown_line_builder;
     markdown_line_builder << "- " << bookmark.get_url();
     return markdown_line_builder.str();
 }
 
-void mylink::write_bookmarks_to_stream(const std::vector<Bookmark>& bookmarks, std::ostream& stream) {
-    stream.clear();
-    stream.seekp(0);
+void write_bookmarks_to_stream(const std::vector<Bookmark>& bookmarks, std::ostream& stream) {
     for(const auto& bookmark : bookmarks) {
         stream << convert_to_markdown_line(bookmark) << '\n';
     }
 }
 
+} //namespace
+
+void mylink::write_bookmarks_to_file(const std::vector<Bookmark>& bookmarks, const std::string& filename) {
+    std::ofstream stream{filename};
+    write_bookmarks_to_stream(bookmarks, stream);
+}
 
 #ifdef MYLINK_TEST_IN_CODE
 #include <doctest.h>

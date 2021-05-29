@@ -1,5 +1,13 @@
+#include <commandlineparser.h>
+#include <markdown_collection.h>
 
-int main(int argc, char **argv)
+using namespace mylink;
+
+int main(int argc, const char **argv)
 {
-    return -1;
+    MarkdownCollection collection("links.md");
+    CommandLineParser parser(collection, std::cout);
+    parser.parse(argc, argv);
+
+    return 0;
 }

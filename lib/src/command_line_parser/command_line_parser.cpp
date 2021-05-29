@@ -19,7 +19,7 @@ void run_action(const std::string& action,
                 Collection& collection,
                 std::ostream& out_stream)
 {
-    static const std::map<std::string, ActionParser> sActionParsers = {{"add", execute_run_command}};
+    static const std::map<std::string, ActionParser> sActionParsers = {{"add", action_add}};
     sActionParsers.at(action)(command_line, collection, out_stream);
 }
 

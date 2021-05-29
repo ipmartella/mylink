@@ -8,7 +8,7 @@
 namespace mylink {
 namespace impl {
 
-void execute_run_command(const ParsedCommandLine& command_line,
+void action_add(const ParsedCommandLine& command_line,
                          mylink::Collection& collection,
                          std::ostream& out_stream);
 

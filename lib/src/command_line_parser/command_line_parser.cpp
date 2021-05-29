@@ -65,6 +65,10 @@ void CommandLineParser::parse(int argc, const char **argv)
 }
 
 std::string mylink::commandline_usage() {
-    return "USAGE\n";
+    return "Usage: mylink <command> [<args>]\n"
+           "\n"
+           "Available commands:\n"
+           "add\tAdds a bookmark to a collection\n"
+           "\n";
 }
 

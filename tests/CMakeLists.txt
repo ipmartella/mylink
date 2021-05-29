@@ -2,10 +2,8 @@
 add_executable(bookmark_tests
     test_runner.cc
     test_argh.cc
-    test_add.cpp
     test_cmdline.cc
     test_bookmark.cpp
-    utils/ram_storage.cpp
     $<TARGET_OBJECTS:booklib_with_tests>
     )
 

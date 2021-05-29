@@ -10,6 +10,8 @@ std::string mylink::convert_to_markdown_line(const Bookmark& bookmark) {
 }
 
 void mylink::write_bookmarks_to_stream(const std::vector<Bookmark>& bookmarks, std::ostream& stream) {
+    stream.clear();
+    stream.seekp(0);
     for(const auto& bookmark : bookmarks) {
         stream << convert_to_markdown_line(bookmark) << '\n';
     }

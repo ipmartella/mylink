@@ -7,7 +7,7 @@ using namespace mylink;
 
 class MockCollection : public Collection {
 public:
-    virtual void add(const Bookmark bookmark) override {
+    virtual void add(const Bookmark& bookmark) override {
         add_calls_.push_back(bookmark);
     }
 

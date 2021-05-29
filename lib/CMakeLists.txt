@@ -2,7 +2,7 @@ set(booklib_sources
     src/command_line_parser/command_line_parser.cpp
     src/command_line_parser/parser_impl.cpp
     src/command_line_parser/action_add.cpp
-    src/stored_collection.cpp
+    src/markdown/markdown_collection.cpp
     src/markdown/markdown_import.cpp
     src/markdown/markdown_export.cpp
     src/bookmark.cpp

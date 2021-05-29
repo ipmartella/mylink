@@ -45,6 +45,8 @@ Bookmark mylink::parse_markdown_line(const std::string& line) {
 }
 
 std::vector<Bookmark> mylink::read_bookmarks_from_stream(std::istream& stream) {
+    stream.clear();
+    stream.seekg(0);
     std::vector<Bookmark> bookmarks;
     std::string line;
     while(std::getline(stream, line, '\n')) {

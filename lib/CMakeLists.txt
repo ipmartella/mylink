@@ -11,12 +11,11 @@ set(booklib_sources
 set(booklib_private_libs argh doctest)
 set(booklib_public_include include)
 
-
-add_library(booklib_with_tests OBJECT ${booklib_sources})
-target_link_libraries(booklib_with_tests PRIVATE ${booklib_private_libs} doctest)
-target_include_directories(booklib_with_tests PUBLIC ${booklib_public_include})
-target_compile_definitions(booklib_with_tests PRIVATE MYLINK_TEST_IN_CODE)
-
 add_library(booklib STATIC ${booklib_sources} )
 target_link_libraries(booklib PRIVATE ${booklib_private_libs})
 target_include_directories(booklib PUBLIC ${booklib_public_include})
+
+add_library(booklib_tests OBJECT $<TARGET_PROPERTY:booklib,SOURCES> tests/test_bookmark.cpp tests/test_cmdline.cpp)
+target_link_libraries(booklib_tests PRIVATE $<TARGET_PROPERTY:booklib,LINK_LIBRARIES> doctest)
+target_include_directories(booklib_tests PUBLIC $<TARGET_PROPERTY:booklib,INCLUDE_DIRECTORIES>)
+target_compile_definitions(booklib_tests PRIVATE MYLINK_TEST_IN_CODE)

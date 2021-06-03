@@ -2,20 +2,11 @@
 #include <commandlineparser.h>
 #include <stdexcept>
 #include <sstream>
+#include <mock_collection.h>
 
 using namespace mylink;
+using namespace mylink::test;
 
-class MockCollection : public Collection {
-public:
-    virtual void add(const Bookmark& bookmark) override {
-        add_calls_.push_back(bookmark);
-    }
-
-    const std::vector<Bookmark>& readAddCalls() { return add_calls_; }
-
-private:
-    std::vector<Bookmark> add_calls_;
-};
 
 class TestParser {
 public:

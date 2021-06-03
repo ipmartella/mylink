@@ -8,8 +8,6 @@ using namespace mylink;
 using namespace mylink::test;
 
 namespace {
-const std::string HOST{"localhost"};
-const int PORT = 1234;
 
 enum HttpErrorCode {
     OK = 200,
@@ -40,7 +38,7 @@ SCENARIO("Add bookmark") {
         Server server(collection);
 
         std::thread server_thread = start_server_in_another_thread(server);
-        httplib::Client client{HOST, PORT};
+        httplib::Client client{DEFAULT_HOST, DEFAULT_PORT};
 
         WHEN("I send an empty POST request to add bookmark") {
             auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(), "", "text/json");
@@ -78,7 +76,7 @@ SCENARIO("Add bookmark") {
 
             THEN("The bookmark is added to the collection") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
-                CHECK_EQ(result->status, 200);
+                CHECK_EQ(result->status, HttpErrorCode::OK);
                 REQUIRE_EQ(collection.readAddCalls().size(), 1);
                 CHECK_EQ(collection.readAddCalls()[0].get_url(), "https://www.wikipedia.org");
             }

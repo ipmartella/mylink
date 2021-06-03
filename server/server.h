@@ -16,9 +16,13 @@ public:
 private:
     Collection& collection_;
     httplib::Server http_server_;
+    void handle_add_bookmark_request_(const httplib::Request& request, httplib::Response& response);
+
 };
 
-const std::string SERVER_ADD_BOOKMARK_URL{"/add_bookmark"};
+const std::string SERVER_ADD_BOOKMARK_URL{"/bookmarks"};
+const std::string DEFAULT_HOST{"localhost"};
+constexpr int DEFAULT_PORT = 1234;
 
 } //namespace mylink
 

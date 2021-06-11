@@ -38,8 +38,12 @@ void mylink::impl::action_add(const ParsedCommandLine& command_line,
 }
 
 std::string mylink::commandline_add_usage() {
-    return "Usage: mylink add <url>\n"
+    return "Usage: mylink add <url> [--title <title>]\n"
            "\n"
            "Adds <url> to the default bookmark collection file\n"
-           "\n";
+           "\n"
+            "Options:\n"
+            "\t-t,--title <title> Sets bookmark title to <title>"
+            "\n"
+            ;
 }

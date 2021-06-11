@@ -59,6 +59,30 @@ SCENARIO("Create a bookmark from a URL") {
     }
 }
 
+SCENARIO("URL title") {
+    GIVEN("A bookmark with a URL and no title specified") {
+        Bookmark bookmark{"https://www.wikipedia.org"};
+        WHEN("You read the title") {
+            auto title = bookmark.get_title();
+
+            THEN("The title will be empty") {
+                CHECK_EQ(title, "");
+            }
+        }
+    }
+    GIVEN("A bookmark with a URL and a title") {
+        Bookmark bookmark{"https://www.wikipedia.org", "Wikipedia"};
+        WHEN("You read the title") {
+            auto title = bookmark.get_title();
+
+            THEN("The title will be equal to the one you set") {
+                CHECK_EQ(title, "Wikipedia");
+            }
+        }
+    }
+
+}
+
 SCENARIO("Check that two Bookmarks are the same") {
     GIVEN("Two bookmarks with different URLs") {
         Bookmark bookmark1{"https://www.wikipedia.org"};
@@ -66,7 +90,7 @@ SCENARIO("Check that two Bookmarks are the same") {
 
         WHEN("They are compared") {
             THEN("They should be marked as not-equal") {
-                CHECK_FALSE(bookmark1.same_url_as(bookmark2));
+                CHECK_FALSE(bookmark1.is_url_same_as(bookmark2));
             }
         }
     }
@@ -76,8 +100,8 @@ SCENARIO("Check that two Bookmarks are the same") {
 
         WHEN("They are compared") {
             THEN("They should be marked as equal") {
-                CHECK(bookmark1.same_url_as(bookmark2));
-                CHECK(bookmark1.same_url_as(bookmark1));
+                CHECK(bookmark1.is_url_same_as(bookmark2));
+                CHECK(bookmark1.is_url_same_as(bookmark1));
             }
         }
     }
@@ -86,7 +110,16 @@ SCENARIO("Check that two Bookmarks are the same") {
         Bookmark bookmark2{"https://wWw.WIKIpedia.org"};
         WHEN("They are compared") {
             THEN("They should be marked as equal") {
-                CHECK(bookmark1.same_url_as(bookmark2));
+                CHECK(bookmark1.is_url_same_as(bookmark2));
+            }
+        }
+    }
+    GIVEN("Two bookmarks with the same URL, but different titles") {
+        Bookmark bookmark1{"https://www.wikipedia.org", "Title"};
+        Bookmark bookmark2{"https://www.wikipedia.org", "Wikipedia"};
+        WHEN("They are compared") {
+            THEN("They should be marked as equal") {
+                CHECK(bookmark1.is_url_same_as(bookmark2));
             }
         }
     }

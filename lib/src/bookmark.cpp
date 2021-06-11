@@ -35,7 +35,7 @@ std::string trim_url(const std::string& input_url) {
 
 
 
-Bookmark::Bookmark(const std::string& url) : url_{trim_url(url)} {
+Bookmark::Bookmark(const std::string& url, const std::string &title) : url_{trim_url(url)}, title_{title} {
     throw_if_url_is_empty(url_);
     throw_if_invalid_format(url_);
 }
@@ -44,7 +44,11 @@ const std::string& Bookmark::get_url() const {
     return url_;
 }
 
-bool Bookmark::same_url_as(const Bookmark &other) const {
+const std::string& Bookmark::get_title() const {
+    return title_;
+}
+
+bool Bookmark::is_url_same_as(const Bookmark &other) const {
     return std::equal(url_.begin(), url_.end(),
                       other.get_url().begin(), other.get_url().end(),
                       [](char a, char b){ return std::tolower(a) == std::tolower(b); }

@@ -8,7 +8,7 @@ namespace {
 bool bookmark_in_collection(const Bookmark& target, const std::vector<Bookmark>& bookmarks)
 {
     for (const auto& bookmark : bookmarks) {
-        if (bookmark.same_url_as(target)) {
+        if (bookmark.is_url_same_as(target)) {
             return true;
         }
     }
@@ -70,9 +70,9 @@ SCENARIO("Adding bookmarks to files") {
             THEN("The stream contains the bookmark + all the previous ones") {
                 auto saved_bookmarks = read_bookmarks_from_file(test_file);
                 CHECK_EQ(saved_bookmarks.size(), 3);
-                CHECK(saved_bookmarks[0].same_url_as(initial_bookmarks[0]));
-                CHECK(saved_bookmarks[1].same_url_as(initial_bookmarks[1]));
-                CHECK(saved_bookmarks[2].same_url_as(new_bookmark));
+                CHECK(saved_bookmarks[0].is_url_same_as(initial_bookmarks[0]));
+                CHECK(saved_bookmarks[1].is_url_same_as(initial_bookmarks[1]));
+                CHECK(saved_bookmarks[2].is_url_same_as(new_bookmark));
             }
         }
 
@@ -83,8 +83,8 @@ SCENARIO("Adding bookmarks to files") {
             THEN("The stream contains only the initial bookmarks") {
                 auto saved_bookmarks = read_bookmarks_from_file(test_file);
                 CHECK_EQ(saved_bookmarks.size(), 2);
-                CHECK(saved_bookmarks[0].same_url_as(initial_bookmarks[0]));
-                CHECK(saved_bookmarks[1].same_url_as(initial_bookmarks[1]));
+                CHECK(saved_bookmarks[0].is_url_same_as(initial_bookmarks[0]));
+                CHECK(saved_bookmarks[1].is_url_same_as(initial_bookmarks[1]));
             }
         }
     }

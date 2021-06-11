@@ -48,7 +48,7 @@ std::vector<Bookmark> read_bookmarks_from_stream(std::istream& stream) {
     std::string line;
     while(std::getline(stream, line, '\n')) {
         auto new_bookmark = parse_markdown_line(line);
-        if(!new_bookmark.same_url_as(INVALID_BOOKMARK)) {
+        if(!new_bookmark.is_url_same_as(INVALID_BOOKMARK)) {
             bookmarks.push_back(new_bookmark);
         }
     }
@@ -78,7 +78,7 @@ namespace {
     {
         INFO("Line:<", line, ">");
         auto bookmark = parse_markdown_line(line);
-        CHECK(bookmark.same_url_as(INVALID_BOOKMARK));
+        CHECK(bookmark.is_url_same_as(INVALID_BOOKMARK));
     }
 
     void line_is_parsed_with_url(const std::string& line, const std::string& expected_url) {

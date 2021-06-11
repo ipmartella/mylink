@@ -17,6 +17,11 @@ std::string extract_url(const ParsedCommandLine& command_line)
     }
 }
 
+std::string extract_title(const ParsedCommandLine& command_line)
+{
+    return command_line.getOption(option_title_short, option_title_long, "");
+}
+
 } //namespace
 
 void mylink::impl::action_add(const ParsedCommandLine& command_line,
@@ -25,7 +30,8 @@ void mylink::impl::action_add(const ParsedCommandLine& command_line,
 {
     try {
         auto url = extract_url(command_line);
-        collection.add(url);
+        auto title = extract_title(command_line);
+        collection.add(Bookmark{url, title});
     }  catch (invalid_command ex) {
         out_stream << commandline_add_usage();
     }

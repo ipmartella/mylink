@@ -11,6 +11,7 @@ struct ParsedCommandLine::impl
 ParsedCommandLine::ParsedCommandLine(int argc, const char** argv)
     : impl_(std::make_unique<ParsedCommandLine::impl>())
 {
+    impl_->arg_parser.add_params({option_title_short, option_title_long});
     impl_->arg_parser.parse(argc, argv);
 }
 
@@ -39,4 +40,10 @@ std::string ParsedCommandLine::getOption(const std::string& option,
                                          const std::string& default_value) const
 {
     return impl_->arg_parser(option, default_value).str();
+}
+
+std::string ParsedCommandLine::getOption(const std::string& short_option, const std::string& long_option,
+                                         const std::string& default_value) const
+{
+    return impl_->arg_parser({short_option.c_str(), long_option.c_str()}, default_value).str();
 }

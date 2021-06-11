@@ -85,8 +85,26 @@ SCENARIO("Add command")
         WHEN("It's called with 'add <url>'") {
             parser.parse_command_and_args({"add", "https://wikipedia.org"});
 
-            THEN("Collection.Add is called with <url>") {
+            THEN("Collection.Add is called with <url>, and no title") {
                 CHECK_EQ(parser.collection().readAddCalls()[0].get_url(), "https://wikipedia.org");
+                CHECK_EQ(parser.collection().readAddCalls()[0].get_title(), "");
+            }
+        }
+
+        WHEN("It's called with 'add <url> -t <title>'") {
+            parser.parse_command_and_args({"add", "https://wikipedia.org", "-t", "My website"});
+
+            THEN("Collection.Add is called with <url>, and <title>") {
+                CHECK_EQ(parser.collection().readAddCalls()[0].get_url(), "https://wikipedia.org");
+                CHECK_EQ(parser.collection().readAddCalls()[0].get_title(), "My website");
+            }
+        }
+        WHEN("It's called with 'add <url> --title <title>'") {
+            parser.parse_command_and_args({"add", "https://wikipedia.org", "--title", "My website"});
+
+            THEN("Collection.Add is called with <url>, and <title>") {
+                CHECK_EQ(parser.collection().readAddCalls()[0].get_url(), "https://wikipedia.org");
+                CHECK_EQ(parser.collection().readAddCalls()[0].get_title(), "My website");
             }
         }
     }

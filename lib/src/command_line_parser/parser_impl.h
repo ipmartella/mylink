@@ -2,6 +2,7 @@
 #define PARSER_IMPL_H
 
 #include <memory>
+#include <vector>
 #include <string>
 
 namespace mylink {
@@ -17,11 +18,15 @@ public:
     bool hasOption(const std::string& option) const;
     std::string getPositional(const size_t index) const;
     std::string getOption(const std::string& option, const std::string& default_value) const;
+    std::string getOption(const std::string& short_option, const std::string& long_option, const std::string& default_value) const;
 
 private:
     struct impl;
     std::unique_ptr<impl> impl_;
 };
+
+constexpr const char* option_title_long = "--title";
+constexpr const char* option_title_short = "-t";
 
 } //namespace impl
 } //namespace mylink

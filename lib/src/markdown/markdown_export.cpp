@@ -1,14 +1,25 @@
 #include "markdown_storage.h"
 #include <sstream>
 #include <fstream>
+#include <regex>
 
 using namespace mylink;
 
 namespace {
 
+std::string escape_link_title(const std::string& title) {
+    static const std::regex square_bracket_regex{R"((\[|\]))"};
+    return std::regex_replace(title, square_bracket_regex, "\\$&");
+}
+
 std::string convert_to_markdown_line(const Bookmark& bookmark) {
     std::stringstream markdown_line_builder;
-    markdown_line_builder << "- " << bookmark.get_url();
+    markdown_line_builder << "- ";
+    if(bookmark.get_title().empty()) {
+        markdown_line_builder << bookmark.get_url();
+    } else {
+        markdown_line_builder << "[" << escape_link_title(bookmark.get_title()) << "](" << bookmark.get_url() << ")";
+    }
     return markdown_line_builder.str();
 }
 
@@ -61,7 +72,8 @@ SCENARIO("Convert vector of Bookmarks to Markdown stream") {
         std::vector<Bookmark> bookmarks{
             Bookmark{"http://www.wikipedia.org"},
             Bookmark{"http://www.url.org"},
-            Bookmark{"http://www.mytesturl.org/test/index"},
+            Bookmark{"http://www.mytesturl.org/test/index", "Test URL"},
+            Bookmark{"http://www.mytesturl.org/test/square", "[Title with square brackets]"},
         };
         WHEN("The bookmarks are written to a stream") {
             std::stringstream stream;
@@ -71,7 +83,8 @@ SCENARIO("Convert vector of Bookmarks to Markdown stream") {
                 CHECK_EQ(stream.str(),
                          "- http://www.wikipedia.org\n"
                          "- http://www.url.org\n"
-                         "- http://www.mytesturl.org/test/index\n");
+                         "- [Test URL](http://www.mytesturl.org/test/index)\n"
+                         "- [\\[Title with square brackets\\]](http://www.mytesturl.org/test/square)\n");
 
             }
         }

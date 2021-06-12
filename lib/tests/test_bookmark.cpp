@@ -71,15 +71,15 @@ SCENARIO("Create a bookmark from a URL") {
     }
 
     GIVEN("A localhost URL") {
-        bookmark_is_created_with_url("localhost", "localhost");
+        bookmark_is_created_with_url("localhost", "http://localhost");
         bookmark_is_created_with_url("http://localhost", "http://localhost");
         bookmark_is_created_with_url("http://localhost:3128", "http://localhost:3128");
         bookmark_is_created_with_url("http://localhost:8080", "http://localhost:8080");
     }
 
     GIVEN("A IP address URL") {
-        bookmark_is_created_with_url("127.0.0.1", "127.0.0.1");
-        bookmark_is_created_with_url("127.0.0.1:8080", "127.0.0.1:8080");
+        bookmark_is_created_with_url("127.0.0.1", "http://127.0.0.1");
+        bookmark_is_created_with_url("127.0.0.1:8080", "http://127.0.0.1:8080");
         bookmark_is_created_with_url("http://127.0.0.1:8080", "http://127.0.0.1:8080");
         bookmark_is_created_with_url("http://127.0.0.1:8080/phpmyadmin", "http://127.0.0.1:8080/phpmyadmin");
     }

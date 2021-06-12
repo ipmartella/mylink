@@ -31,11 +31,23 @@ void throw_if_not_start_with_number_or_letter(const std::string& url) {
 }
 
 std::string trim_url(const std::string& input_url) {
-    static std::regex trim_url_regex(R"(^\s*(\S*)\s*$)");
+    static const std::regex trim_url_regex(R"(^\s*(\S*)\s*$)");
     std::smatch match;
     std::regex_match(input_url, match, trim_url_regex);
     return match[1];
 }
+
+std::string extract_protocol(const std::string& url) {
+    static const std::regex protocol_regex(R"(^([a-zA-Z]+)://.*)");
+    std::smatch match;
+    if(std::regex_match(url, match, protocol_regex)) {
+        return match[1];
+    } else {
+        return "";
+    }
+}
+
+const std::string DEFAULT_PROTOCOL = "http://";
 
 } //namespace
 
@@ -46,6 +58,9 @@ Bookmark::Bookmark(const std::string& url, const std::string &title) : url_{trim
     throw_if_url_is_empty(url_);
     throw_if_contains_whitespace(url_);
     throw_if_not_start_with_number_or_letter(url_);
+    if(extract_protocol(url_).empty()) {
+        url_ = DEFAULT_PROTOCOL + url_;
+    }
 }
 
 const std::string& Bookmark::get_url() const {
@@ -72,6 +87,17 @@ TEST_CASE("Trim url tests") {
     CHECK_EQ(trim_url(" https://www.wikipedia.org"), "https://www.wikipedia.org");
     CHECK_EQ(trim_url("https://www.wikipedia.org "), "https://www.wikipedia.org");
     CHECK_EQ(trim_url("\t https://www.wikipedia.org \r\n"), "https://www.wikipedia.org");
+}
+
+TEST_CASE("Extract protocol tests") {
+    CHECK_EQ(extract_protocol("http://www.wikipedia.org"), "http");
+    CHECK_EQ(extract_protocol("https://www.wikipedia.org"), "https");
+    CHECK_EQ(extract_protocol("ftp://www.wikipedia.org"), "ftp");
+    CHECK_EQ(extract_protocol("file://home/user/file"), "file");
+    CHECK_EQ(extract_protocol("localhost"), "");
+    CHECK_EQ(extract_protocol("www.wikipedia.org"), "");
+    CHECK_EQ(extract_protocol("127.0.0.1:3128"), "");
+    CHECK_EQ(extract_protocol("localhost:3128"), "");
 }
 
 #endif

@@ -14,6 +14,8 @@ namespace mylink {
  * - Strings containing whitespace characters
  * - Strings not starting with a ASCII letter or a number
  *
+ * When a URL does not specify protocol, then 'http' is used as default protocol (i.e. 'localhost' => 'http://localhost').
+ *
  * Bookmarks MAY have a title, which is a (possibly empty) string of characters.
  */
 class Bookmark {

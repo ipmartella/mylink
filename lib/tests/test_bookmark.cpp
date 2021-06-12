@@ -22,11 +22,36 @@ void bookmark_is_created_with_url(const std::string& url, const std::string& act
 } //namespace
 
 SCENARIO("Create a bookmark from a URL") {
-    GIVEN("A 'empty' URL") {
+    GIVEN("A 'empty' string") {
         std::vector<std::string> empty_urls = {"", " ", "\t", "\n", "\r\n", " \t    "};
         for (const auto& url : empty_urls) {
             bookmark_cannot_be_created_with_url(url);
         }
+    }
+
+    GIVEN("A non-empty string not containing at least 1 ASCII letter") {
+        std::vector<std::string> invalid_urls = {
+            "_INVALID_",
+            "**********************",
+            "- --------------------- -"
+        };
+
+        for (const auto& url : invalid_urls) {
+            bookmark_cannot_be_created_with_url(url);
+        }
+    }
+
+    GIVEN("A non-empty string not starting with a ASCII letter or a number") {
+        std::vector<std::string> invalid_urls = {
+            "_INVALID_",
+            "*********aa************",
+            "-12-------------------- -"
+        };
+
+        for (const auto& url : invalid_urls) {
+            bookmark_cannot_be_created_with_url(url);
+        }
+
     }
 
     GIVEN("Variations of a plain URL like http://www.wikipedia.org") {
@@ -45,17 +70,18 @@ SCENARIO("Create a bookmark from a URL") {
         }
     }
 
-    GIVEN("An invalid URL") {
-        std::vector<std::string> invalid_urls = {
-            "_INVALID_",
-            "pippo",
-            "**********************",
-            "- --------------------- -"
-        };
+    GIVEN("A localhost URL") {
+        bookmark_is_created_with_url("localhost", "localhost");
+        bookmark_is_created_with_url("http://localhost", "http://localhost");
+        bookmark_is_created_with_url("http://localhost:3128", "http://localhost:3128");
+        bookmark_is_created_with_url("http://localhost:8080", "http://localhost:8080");
+    }
 
-        for (const auto& url : invalid_urls) {
-            bookmark_cannot_be_created_with_url(url);
-        }
+    GIVEN("A IP address URL") {
+        bookmark_is_created_with_url("127.0.0.1", "127.0.0.1");
+        bookmark_is_created_with_url("127.0.0.1:8080", "127.0.0.1:8080");
+        bookmark_is_created_with_url("http://127.0.0.1:8080", "http://127.0.0.1:8080");
+        bookmark_is_created_with_url("http://127.0.0.1:8080/phpmyadmin", "http://127.0.0.1:8080/phpmyadmin");
     }
 }
 

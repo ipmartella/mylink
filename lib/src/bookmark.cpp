@@ -6,7 +6,6 @@ using namespace mylink;
 
 namespace {
 
-std::regex empty_url_regex(R"(^\s*$)");
 
 
 void throw_if_url_is_empty(const std::string& url) {
@@ -15,11 +14,19 @@ void throw_if_url_is_empty(const std::string& url) {
     }
 }
 
-void throw_if_invalid_format(const std::string& input_url) {
-    static std::regex url_starts_with_protocol_or_slash(R"(^(([a-zA-z]+:)|\/)\S*$)");
+void throw_if_contains_whitespace(const std::string& url) {
+    static const std::regex contains_whitespace(R"(\s)");
     std::smatch match;
-    if(!std::regex_match(input_url, match, url_starts_with_protocol_or_slash)) {
-        throw std::invalid_argument("URL must start with a protocol (like http://) or with a /");
+    if(std::regex_search(url, match, contains_whitespace)) {
+        throw std::invalid_argument("URL cannot contain whitespace");
+    }
+}
+
+void throw_if_not_start_with_number_or_letter(const std::string& url) {
+    static const std::regex starts_with_letters_or_numbers(R"(^[a-zA-Z0-9])");
+    std::smatch match;
+    if(!std::regex_search(url, match, starts_with_letters_or_numbers)) {
+        throw std::invalid_argument("URL must start with a ASCII letter or a number");
     }
 }
 
@@ -37,7 +44,8 @@ std::string trim_url(const std::string& input_url) {
 
 Bookmark::Bookmark(const std::string& url, const std::string &title) : url_{trim_url(url)}, title_{title} {
     throw_if_url_is_empty(url_);
-    throw_if_invalid_format(url_);
+    throw_if_contains_whitespace(url_);
+    throw_if_not_start_with_number_or_letter(url_);
 }
 
 const std::string& Bookmark::get_url() const {

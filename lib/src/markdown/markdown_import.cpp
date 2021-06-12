@@ -22,32 +22,54 @@ private:
     std::string target_;
 };
 
-const std::regex regexp_simple(R"(^\s*[\*-]\s*(\S+)\s*$)");
 
 Bookmark convert_plain_url_list_item_to_bookmark(const std::string& line) {
+    static const std::regex regexp_simple(R"(^\s*[\*-]\s*(\S+)\s*$)");
     std::smatch match;
     if(std::regex_match(line, match, regexp_simple)) {
         return Bookmark{match[1]};
     } else {
-        throw no_match_found(regexp_simple, line);
+        return INVALID_BOOKMARK;
+    }
+}
+
+Bookmark convert_markdown_link_list_item_to_bookmark(const std::string& line) {
+    static const std::regex regexp_markdown_link(R"(\s*[\*-]\s*\[(.+)\]\((.*)\)\s*$)");
+    std::smatch match;
+    if(std::regex_match(line, match, regexp_markdown_link)) {
+        return Bookmark{match[2], match[1]};
+    } else {
+        return INVALID_BOOKMARK;
     }
 }
 
 Bookmark parse_markdown_line(const std::string& line) {
-    try {
-        return convert_plain_url_list_item_to_bookmark(line);
-    }  catch (no_match_found) {
-        return INVALID_BOOKMARK;
-    } catch(std::invalid_argument) {
-        return INVALID_BOOKMARK;
+    const auto conversion_functions = {
+        convert_markdown_link_list_item_to_bookmark,
+        convert_plain_url_list_item_to_bookmark
+    };
+
+    Bookmark bookmark = INVALID_BOOKMARK;
+    for(const auto conversion_func : conversion_functions) {
+        try {
+            bookmark = conversion_func(line);
+            if(!bookmark.is_url_same_as(INVALID_BOOKMARK)) {
+                return bookmark;
+            }
+        } catch(std::invalid_argument&) {
+            bookmark = INVALID_BOOKMARK;
+        }
     }
+    return INVALID_BOOKMARK;
 }
 
 std::vector<Bookmark> read_bookmarks_from_stream(std::istream& stream) {
     std::vector<Bookmark> bookmarks;
     std::string line;
     while(std::getline(stream, line, '\n')) {
-        auto new_bookmark = parse_markdown_line(line);
+        Bookmark new_bookmark = INVALID_BOOKMARK;
+        new_bookmark = parse_markdown_line(line);
+
         if(!new_bookmark.is_url_same_as(INVALID_BOOKMARK)) {
             bookmarks.push_back(new_bookmark);
         }
@@ -85,6 +107,13 @@ namespace {
         INFO("Line:<", line, ">");
         auto bookmark = parse_markdown_line(line);
         CHECK_EQ(bookmark.get_url(), expected_url);
+    }
+
+    void line_is_parsed_with_url_and_title(const std::string& line, const std::string& expected_url, const std::string& expected_title) {
+        INFO("Line:<", line, ">");
+        auto bookmark = parse_markdown_line(line);
+        CHECK_EQ(bookmark.get_url(), expected_url);
+        CHECK_EQ(bookmark.get_title(), expected_title);
     }
 } //namespace
 
@@ -126,6 +155,23 @@ SCENARIO("Covert Markdown to bookmark")
 
         for (const auto& line : empty_lines) {
             line_is_parsed_with_url(line, "https://www.wikipedia.org");
+        }
+    }
+    GIVEN("Variations of <- [Test url](http://www.mytesturl.org)>")
+    {
+        std::vector<std::string> lines_with_titles = {
+            "- [Test url](http://www.mytesturl.org)\n",
+            " - [Test url](http://www.mytesturl.org)   ",
+            " \t - [Test url](http://www.mytesturl.org)   ",
+            "\t-[Test url](http://www.mytesturl.org)   ",
+            "* [Test url](http://www.mytesturl.org)\r\n",
+            " * [Test url](http://www.mytesturl.org)   \r",
+            " \t * [Test url](http://www.mytesturl.org)   ",
+            "\t*[Test url](http://www.mytesturl.org)   ",
+        };
+
+        for(const auto& line: lines_with_titles) {
+            line_is_parsed_with_url_and_title(line, "http://www.mytesturl.org", "Test url");
         }
     }
 

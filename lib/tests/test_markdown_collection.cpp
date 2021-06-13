@@ -62,3 +62,18 @@ SCENARIO("Adding bookmarks to files") {
     }
 
 }
+
+SCENARIO("Reading bookmarks from a file") {
+    GIVEN("A empty file") {
+        const std::string test_file = "/tmp/mylink_test3";
+        std::remove(test_file.c_str());
+
+        MarkdownCollection collection{test_file};
+
+        WHEN("I read the size of the collection") {
+            THEN("I get zero") {
+                CHECK_EQ(collection.size(), 0);
+            }
+        }
+    }
+}

@@ -7,9 +7,10 @@ namespace test {
 
 class MockCollection : public Collection {
 public:
-    virtual void add(const Bookmark& bookmark) override {
+    void add(const Bookmark& bookmark) override {
         add_calls_.push_back(bookmark);
     }
+    size_t size() const override { return 0; }
 
     const std::vector<Bookmark>& readAddCalls() { return add_calls_; }
 

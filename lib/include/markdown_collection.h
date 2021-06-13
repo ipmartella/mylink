@@ -10,7 +10,8 @@ class MarkdownCollection : public Collection
 {
 public:
     explicit MarkdownCollection(const std::string& markdown_file_name);
-    void add(const Bookmark& bookmark);
+    void add(const Bookmark& bookmark) override;
+    size_t size() const override;
 
     ~MarkdownCollection() = default;
 

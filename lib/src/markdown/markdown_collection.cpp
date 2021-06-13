@@ -27,3 +27,9 @@ void MarkdownCollection::add(const Bookmark& bookmark)
         write_bookmarks_to_file(bookmarks, filename_);
     }
 }
+
+size_t MarkdownCollection::size() const
+{
+    std::vector<Bookmark> bookmarks = read_bookmarks_from_file(filename_);
+    return bookmarks.size();
+}

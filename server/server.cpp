@@ -9,6 +9,9 @@ using namespace nlohmann;
 
 namespace {
 
+const std::string json_field_url = "url";
+const std::string json_field_title = "title";
+
 class HttpParseException : public std::invalid_argument {
 public:
     HttpParseException(std::string msg) : std::invalid_argument(msg) {}
@@ -41,11 +44,12 @@ Bookmark build_bookmark_from_add_request(const std::string& add_request_body) {
         throw HttpParseException("Invalid JSON format");
     }
 
-    if(!add_request.contains("url")) {
+    if(!add_request.contains(json_field_url)) {
         throw HttpParseException("The request MUST contain the 'url' field");
     }
 
-    return Bookmark{add_request["url"]};
+
+    return Bookmark{add_request[json_field_url], add_request.value(json_field_title, "")};
 }
 
 

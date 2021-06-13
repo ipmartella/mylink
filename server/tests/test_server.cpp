@@ -69,16 +69,31 @@ SCENARIO("Add bookmark") {
         }
 
 
-        WHEN("I send a POST request for adding a bookmark via URL") {
+        WHEN("I send a POST request for adding a bookmark with just the URL") {
             auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(),
                                       R"({"url":"https://www.wikipedia.org"})",
                                       "text/json");
 
-            THEN("The bookmark is added to the collection") {
+            THEN("The bookmark is added to the collection without title") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::OK);
                 REQUIRE_EQ(collection.readAddCalls().size(), 1);
                 CHECK_EQ(collection.readAddCalls()[0].get_url(), "https://www.wikipedia.org");
+                CHECK_EQ(collection.readAddCalls()[0].get_title(), "");
+            }
+        }
+
+        WHEN("I send a POST request for adding a bookmark with URL and title") {
+            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(),
+                                      R"({"url":"https://www.wikipedia.org", "title": "Wikipedia"})",
+                                      "text/json");
+
+            THEN("The bookmark is added to the collection with the specified title") {
+                REQUIRE_EQ(result.error(), httplib::Error::Success);
+                CHECK_EQ(result->status, HttpErrorCode::OK);
+                REQUIRE_EQ(collection.readAddCalls().size(), 1);
+                CHECK_EQ(collection.readAddCalls()[0].get_url(), "https://www.wikipedia.org");
+                CHECK_EQ(collection.readAddCalls()[0].get_title(), "Wikipedia");
             }
         }
 

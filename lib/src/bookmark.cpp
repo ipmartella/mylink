@@ -79,9 +79,14 @@ bool Bookmark::is_url_same_as(const Bookmark &other) const {
 
 }
 
-bool Bookmark::operator==(const Bookmark &rhs) const
+bool Bookmark::operator==(const Bookmark &other) const
 {
-    return url_ == rhs.url_ && title_ == rhs.title_;
+    return is_url_same_as(other) && title_ == other.title_;
+}
+
+bool Bookmark::operator!=(const Bookmark &other) const
+{
+    return !(operator==(other));
 }
 
 

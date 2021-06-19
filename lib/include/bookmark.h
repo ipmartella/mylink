@@ -17,6 +17,7 @@ namespace mylink {
  * When a URL does not specify protocol, then 'http' is used as default protocol (i.e. 'localhost' => 'http://localhost').
  *
  * Bookmarks MAY have a title, which is a (possibly empty) string of characters.
+ * Bookmarks compare equal if they have the same URL and title, otherwise they compare false.
  */
 class Bookmark {
 public:
@@ -25,6 +26,7 @@ public:
     const std::string& get_title() const;
     bool is_url_same_as(const Bookmark& other) const;
     bool operator==(const Bookmark& rhs) const;
+    bool operator!=(const Bookmark& rhs) const;
 
 private:
     std::string url_;

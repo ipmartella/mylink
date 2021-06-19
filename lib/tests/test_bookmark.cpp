@@ -109,12 +109,12 @@ SCENARIO("URL title") {
 
 }
 
-SCENARIO("Check that two Bookmarks are the same") {
+SCENARIO("Check that two Bookmarks have the same URL") {
     GIVEN("Two bookmarks with different URLs") {
         Bookmark bookmark1{"https://www.wikipedia.org"};
         Bookmark bookmark2{"https://en.cppreference.org"};
 
-        WHEN("They are compared") {
+        WHEN("Their URLs are compared") {
             THEN("They should be marked as not-equal") {
                 CHECK_FALSE(bookmark1.is_url_same_as(bookmark2));
             }
@@ -124,7 +124,7 @@ SCENARIO("Check that two Bookmarks are the same") {
         Bookmark bookmark1{"https://www.wikipedia.org"};
         Bookmark bookmark2{"https://www.wikipedia.org"};
 
-        WHEN("They are compared") {
+        WHEN("Their URLs are compared") {
             THEN("They should be marked as equal") {
                 CHECK(bookmark1.is_url_same_as(bookmark2));
                 CHECK(bookmark1.is_url_same_as(bookmark1));
@@ -134,7 +134,7 @@ SCENARIO("Check that two Bookmarks are the same") {
     GIVEN("Two bookmarks with the same URL (case insensitive)") {
         Bookmark bookmark1{"https://www.wikipedia.org"};
         Bookmark bookmark2{"https://wWw.WIKIpedia.org"};
-        WHEN("They are compared") {
+        WHEN("Their URLs are compared") {
             THEN("They should be marked as equal") {
                 CHECK(bookmark1.is_url_same_as(bookmark2));
             }
@@ -143,10 +143,46 @@ SCENARIO("Check that two Bookmarks are the same") {
     GIVEN("Two bookmarks with the same URL, but different titles") {
         Bookmark bookmark1{"https://www.wikipedia.org", "Title"};
         Bookmark bookmark2{"https://www.wikipedia.org", "Wikipedia"};
-        WHEN("They are compared") {
+        WHEN("Their URLs are compared") {
             THEN("They should be marked as equal") {
                 CHECK(bookmark1.is_url_same_as(bookmark2));
             }
         }
     }
+}
+
+SCENARIO("Bookmark equality") {
+    GIVEN("Two Bookmarks with the same URL") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://www.wikipedia.org"};
+
+        WHEN("They are compared") {
+            THEN("They are equal") {
+                CHECK_EQ(bookmark1, bookmark2);
+            }
+        }
+    }
+
+    GIVEN("Two Bookmarks with the same URL (case-insensitive)") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://www.WIKipeDIa.org"};
+
+        WHEN("They are compared") {
+            THEN("They are equal") {
+                CHECK_EQ(bookmark1, bookmark2);
+            }
+        }
+    }
+
+    GIVEN("Two Bookmarks with different URL") {
+        Bookmark bookmark1{"https://www.wikipedia.org"};
+        Bookmark bookmark2{"https://en.cppreference.org"};
+
+        WHEN("They are compared") {
+            THEN("They are equal") {
+                CHECK_NE(bookmark1, bookmark2);
+            }
+        }
+    }
+
 }

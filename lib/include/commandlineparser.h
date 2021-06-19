@@ -8,11 +8,11 @@ namespace mylink {
 class CommandLineParser
 {
 public:
-    CommandLineParser(Collection& collection, std::ostream& stdout);
+    CommandLineParser(BookmarkCollection& collection, std::ostream& stdout);
     void parse(int argc, const char** argv);
 
 private:
-    Collection& collection_;
+    BookmarkCollection& collection_;
     std::ostream& out_stream_;
 };
 

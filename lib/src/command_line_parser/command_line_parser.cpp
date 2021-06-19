@@ -16,7 +16,7 @@ using ActionParser = std::function<void(const ParsedCommandLine&, Collection&, s
 
 void run_action(const std::string& action,
                 const ParsedCommandLine& command_line,
-                Collection& collection,
+                BookmarkCollection& collection,
                 std::ostream& out_stream)
 {
     static const std::map<std::string, ActionParser> sActionParsers = {{"add", action_add}};
@@ -43,7 +43,7 @@ void throw_if_impossible_arguments(int argc, const char**) {
 } //namespace
 
 
-CommandLineParser::CommandLineParser(Collection &collection, std::ostream &stdout = std::cout) : collection_(collection), out_stream_(stdout)
+CommandLineParser::CommandLineParser(BookmarkCollection &collection, std::ostream &stdout = std::cout) : collection_(collection), out_stream_(stdout)
 {}
 
 void CommandLineParser::parse(int argc, const char **argv)

@@ -8,13 +8,13 @@ namespace mylink {
 class Server
 {
 public:
-    Server(Collection& collection);
+    Server(BookmarkCollection& collection);
     void start();
     void stop();
     bool is_started() const;
 
 private:
-    Collection& collection_;
+    BookmarkCollection& collection_;
     httplib::Server http_server_;
     void handle_add_bookmark_request_(const httplib::Request& request, httplib::Response& response);
 };

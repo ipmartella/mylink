@@ -6,7 +6,7 @@
 
 namespace mylink {
 
-class MarkdownCollection : public Collection
+class MarkdownCollection : public BookmarkCollection
 {
 public:
     explicit MarkdownCollection(const std::string& markdown_file_name);

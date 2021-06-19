@@ -2,23 +2,39 @@
 #define COLLECTION_HPP
 
 #include "bookmark.h"
-#include <vector>
+#include <unordered_map>
 
 namespace mylink {
 
-class Collection {
+/**
+ * @brief A collection of Bookmarks, each with a unique URL.
+ *
+ * The BookmarkCollection class allows you to add/remove/edit a unordered collection of Bookmarks.
+ * All Bookmarks in this collection have a different URL.
+ */
+class BookmarkCollection {
 public:
-//    using iterator = std::vector<Bookmark>::iterator;
-//    using const_iterator = std::vector<Bookmark>::const_iterator;
+    using bookmark_container_type = std::unordered_map<std::string, Bookmark>;
+    using iterator = bookmark_container_type::iterator;
+    using const_iterator = bookmark_container_type::const_iterator;
 
-    virtual void add(const Bookmark& bookmark) = 0;
-    virtual size_t size() const = 0;
-//    virtual iterator begin() = 0;
-//    virtual iterator end() = 0;
-//    virtual const_iterator begin() const = 0;
-//    virtual const_iterator end() const = 0;
+    void add(const Bookmark& bookmark);
 
-    virtual ~Collection() = default;
+    //void remove(const std::string& url);
+    //void remove(const Bookmark& bookmark);
+
+    size_t size() const;
+    Bookmark operator[](const std::string& url) const;
+
+    //iterator begin();
+    //iterator end();
+    //const_iterator begin() const;
+    //const_iterator end() const;
+
+    virtual ~BookmarkCollection() = default;
+
+private:
+    bookmark_container_type bookmarks_;
 };
 
 } //namespace mylink

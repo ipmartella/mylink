@@ -25,7 +25,7 @@ std::string extract_title(const ParsedCommandLine& command_line)
 } //namespace
 
 void mylink::impl::action_add(const ParsedCommandLine& command_line,
-                                     Collection& collection,
+                                     BookmarkCollection& collection,
                                      std::ostream& out_stream)
 {
     try {

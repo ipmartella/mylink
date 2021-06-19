@@ -24,6 +24,7 @@ public:
     const std::string& get_url() const;
     const std::string& get_title() const;
     bool is_url_same_as(const Bookmark& other) const;
+    bool operator==(const Bookmark& rhs) const;
 
 private:
     std::string url_;

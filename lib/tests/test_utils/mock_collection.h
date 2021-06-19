@@ -5,7 +5,7 @@
 namespace mylink {
 namespace test {
 
-class MockCollection : public Collection {
+class MockCollection : public BookmarkCollection {
 public:
     void add(const Bookmark& bookmark) override {
         add_calls_.push_back(bookmark);

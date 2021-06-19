@@ -79,6 +79,11 @@ bool Bookmark::is_url_same_as(const Bookmark &other) const {
 
 }
 
+bool Bookmark::operator==(const Bookmark &rhs) const
+{
+    return url_ == rhs.url_ && title_ == rhs.title_;
+}
+
 
 #ifdef MYLINK_TEST_IN_CODE
 #include <doctest.h>

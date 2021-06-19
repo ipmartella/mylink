@@ -4,7 +4,7 @@ add_executable(bookmark_tests
     test_runner.cc
     $<TARGET_OBJECTS:booklib_tests>
     $<TARGET_OBJECTS:argh_tests>
-    $<TARGET_OBJECTS:mylinkserver_tests>
+    #$<TARGET_OBJECTS:mylinkserver_tests>
     )
 
 target_link_libraries(bookmark_tests PRIVATE doctest)

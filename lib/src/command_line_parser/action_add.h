@@ -9,7 +9,7 @@ namespace mylink {
 namespace impl {
 
 void action_add(const ParsedCommandLine& command_line,
-                         mylink::Collection& collection,
+                         mylink::BookmarkCollection& collection,
                          std::ostream& out_stream);
 
 } //namespace impl

@@ -38,10 +38,10 @@ SCENARIO("Add bookmark") {
         Server server(collection);
 
         std::thread server_thread = start_server_in_another_thread(server);
-        httplib::Client client{DEFAULT_HOST, DEFAULT_PORT};
+        httplib::Client client{server_default_host, server_default_port};
 
         WHEN("I send an empty POST request to add bookmark") {
-            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(), "", "text/json");
+            auto result = client.Post(server_url_bookmarks.c_str(), "", "text/json");
 
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
@@ -50,7 +50,7 @@ SCENARIO("Add bookmark") {
         }
 
         WHEN("I send an non JSON request to add bookmark") {
-            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(), "ciao", "text/json");
+            auto result = client.Post(server_url_bookmarks.c_str(), "ciao", "text/json");
 
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
@@ -59,7 +59,7 @@ SCENARIO("Add bookmark") {
         }
 
         WHEN("I send a JSON request without the url field") {
-            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(),
+            auto result = client.Post(server_url_bookmarks.c_str(),
                                       R"({"answer":42})",
                                       "text/json");
             THEN("A Bad Request HTTP error code is returned") {
@@ -70,7 +70,7 @@ SCENARIO("Add bookmark") {
 
 
         WHEN("I send a POST request for adding a bookmark with just the URL") {
-            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(),
+            auto result = client.Post(server_url_bookmarks.c_str(),
                                       R"({"url":"https://www.wikipedia.org"})",
                                       "text/json");
 
@@ -84,7 +84,7 @@ SCENARIO("Add bookmark") {
         }
 
         WHEN("I send a POST request for adding a bookmark with URL and title") {
-            auto result = client.Post(SERVER_ADD_BOOKMARK_URL.c_str(),
+            auto result = client.Post(server_url_bookmarks.c_str(),
                                       R"({"url":"https://www.wikipedia.org", "title": "Wikipedia"})",
                                       "text/json");
 

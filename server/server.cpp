@@ -57,9 +57,9 @@ Bookmark build_bookmark_from_add_request(const std::string& add_request_body) {
 
 Server::Server(Collection &collection) : collection_{collection}, http_server_{}
 {
-    http_server_.Options(SERVER_ADD_BOOKMARK_URL.c_str(), allow_cors_from_any_origin);
+    http_server_.Options(server_url_bookmarks.c_str(), allow_cors_from_any_origin);
 
-    http_server_.Post(SERVER_ADD_BOOKMARK_URL.c_str(), [&](const httplib::Request& request, httplib::Response& response) {
+    http_server_.Post(server_url_bookmarks.c_str(), [&](const httplib::Request& request, httplib::Response& response) {
         handle_add_bookmark_request_(request, response);
     });
 

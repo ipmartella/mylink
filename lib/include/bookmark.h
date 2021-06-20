@@ -15,6 +15,7 @@ namespace mylink {
  * - Strings not starting with a ASCII letter or a number
  *
  * When a URL does not specify protocol, then 'http' is used as default protocol (i.e. 'localhost' => 'http://localhost').
+ * URLs are case-insensitive.
  *
  * Bookmarks MAY have a title, which is a (possibly empty) string of characters.
  * Bookmarks compare equal if they have the same URL and title, otherwise they compare false.
@@ -29,7 +30,14 @@ public:
     bool operator!=(const Bookmark& rhs) const;
 
 private:
+    /**
+     * @brief URL for this Bookmark. See class documentation for more details.
+     */
     std::string url_;
+
+    /**
+     * @brief Title for this Bookmark. See class documentation for more details
+     */
     std::string title_;
 };
 

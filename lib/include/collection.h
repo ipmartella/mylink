@@ -26,6 +26,8 @@ public:
     size_t size() const;
     Bookmark operator[](const std::string& url) const;
 
+    bool contains(const std::string &url) const;
+
     //iterator begin();
     //iterator end();
     //const_iterator begin() const;
@@ -34,6 +36,9 @@ public:
     virtual ~BookmarkCollection() = default;
 
 private:
+    /**
+     * @brief Container for all Bookmarks.
+     */
     bookmark_container_type bookmarks_;
 };
 

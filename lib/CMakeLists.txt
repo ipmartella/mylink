@@ -5,6 +5,7 @@ set(booklib_sources
     #src/markdown/markdown_collection.cpp
     #src/markdown/markdown_import.cpp
     #src/markdown/markdown_export.cpp
+    #src/markdown/markdown_storage.cpp
     src/bookmark.cpp
     src/collection.cpp
 )

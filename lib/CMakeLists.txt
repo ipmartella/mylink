@@ -8,6 +8,7 @@ set(booklib_sources
     src/markdown/markdown_storage.cpp
     src/bookmark.cpp
     src/collection.cpp
+    src/collection_iterator.cpp
 )
 
 set(booklib_private_libs argh doctest)

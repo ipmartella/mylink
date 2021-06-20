@@ -15,8 +15,44 @@ namespace mylink {
 class BookmarkCollection {
 public:
     using bookmark_container_type = std::unordered_map<std::string, Bookmark>;
-    using iterator = bookmark_container_type::iterator;
-    using const_iterator = bookmark_container_type::const_iterator;
+
+    class iterator {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Bookmark;
+        using difference_type = int;
+        using pointer = Bookmark*;
+        using reference = Bookmark&;
+
+        explicit iterator();
+        explicit iterator(bookmark_container_type::iterator underlying_iterator);
+        iterator& operator++();
+        reference operator*() const;
+        bool operator==(const iterator& other) const;
+        bool operator!=(const iterator& other) const;
+
+    private:
+        bookmark_container_type::iterator underlying_iterator_;
+    };
+
+    class const_iterator {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = const Bookmark;
+        using difference_type = int;
+        using pointer = const Bookmark*;
+        using reference = const Bookmark&;
+
+        explicit const_iterator();
+        explicit const_iterator(bookmark_container_type::const_iterator underlying_iterator);
+        const_iterator& operator++();
+        reference operator*() const;
+        bool operator==(const const_iterator& other) const;
+        bool operator!=(const const_iterator& other) const;
+
+    private:
+        bookmark_container_type::const_iterator underlying_iterator_;
+    };
 
     void add(const Bookmark& bookmark);
 
@@ -28,10 +64,10 @@ public:
 
     bool contains(const std::string &url) const;
 
-    //iterator begin();
-    //iterator end();
-    //const_iterator begin() const;
-    //const_iterator end() const;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
 
     virtual ~BookmarkCollection() = default;
 

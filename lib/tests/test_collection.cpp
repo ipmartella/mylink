@@ -1,6 +1,8 @@
 #include <collection.h>
 #include <doctest.h>
 #include <stdexcept>
+#include <vector>
+#include <algorithm>
 
 using namespace mylink;
 
@@ -107,5 +109,30 @@ SCENARIO("Check that Bookmark is inside collection") {
             }
         }
     }
+}
 
+SCENARIO("Iterating over Bookmarks in a BookmarkCollection") {
+    GIVEN("A populated BookmarkCollection") {
+        BookmarkCollection collection;
+        std::vector<Bookmark> test_bookmarks = {
+            Bookmark("http://www.url1.org"),
+            Bookmark("http://www.url2.org", "URL 2")
+        };
+
+        for(const auto& bookmark : test_bookmarks) {
+            collection.add(bookmark);
+        }
+
+        WHEN("I iterate over all Bookmarks in the BookmarkCollection") {
+            THEN("I can verify that all Bookmarks are present") {
+                for(const auto& bookmark : collection) {
+                    test_bookmarks.erase(
+                                std::remove(test_bookmarks.begin(), test_bookmarks.end(), bookmark),
+                                test_bookmarks.end());
+
+                }
+                CHECK(test_bookmarks.empty());
+            }
+        }
+    }
 }

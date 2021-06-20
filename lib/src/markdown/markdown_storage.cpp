@@ -80,7 +80,7 @@ BookmarkCollection read_bookmarks_from_stream(std::istream& stream) {
 } //namespace
 
 
-MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : filename_(filename)
+MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : filepath_(filename)
 { }
 
 void MarkdownStorageBackend::save(const BookmarkCollection &collection)
@@ -90,7 +90,7 @@ void MarkdownStorageBackend::save(const BookmarkCollection &collection)
 
 BookmarkCollection MarkdownStorageBackend::load()
 {
-    std::ifstream stream{filename_};
+    std::ifstream stream{filepath_};
     return read_bookmarks_from_stream(stream);
 }
 
@@ -218,9 +218,9 @@ SCENARIO("Convert Markdown stream to Bookmarks") {
 
             THEN("The bookmarks are read") {
                 CHECK_EQ(bookmarks.size(), 3);
-                CHECK_EQ(bookmarks[0].get_url(), "https://www.wikipedia.org");
-                CHECK_EQ(bookmarks[1].get_url(), "https://www.github.org");
-                CHECK_EQ(bookmarks[2].get_url(), "https://www.myurl.com/index/test");
+                CHECK(bookmarks.contains("https://www.wikipedia.org"));
+                CHECK(bookmarks.contains("https://www.github.org"));
+                CHECK(bookmarks.contains("https://www.myurl.com/index/test"));
             }
         }
     }
@@ -241,9 +241,9 @@ SCENARIO("Convert Markdown stream to Bookmarks") {
 
             THEN("The bookmarks are read") {
                 CHECK_EQ(bookmarks.size(), 3);
-                CHECK_EQ(bookmarks[0].get_url(), ("https://www.wikipedia.org"));
-                CHECK_EQ(bookmarks[1].get_url(), ("https://www.github.org"));
-                CHECK_EQ(bookmarks[2].get_url(), ("https://www.myurl.com/index/test"));
+                CHECK(bookmarks.contains("https://www.wikipedia.org"));
+                CHECK(bookmarks.contains("https://www.github.org"));
+                CHECK(bookmarks.contains("https://www.myurl.com/index/test"));
             }
         }
     }

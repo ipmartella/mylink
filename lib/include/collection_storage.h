@@ -12,7 +12,16 @@ namespace mylink {
  */
 class BookmarkCollectionStorageBackend {
 public:
+    /**
+     * @brief Stores the given BookmarkCollection to permanent storage.
+     * @param collection Collection to store
+     */
     virtual void save(const BookmarkCollection& collection) = 0;
+
+    /**
+     * @brief Loads a BookmarkCollection from permanent storage.
+     * @return Collection loaded from permanent storage
+     */
     virtual BookmarkCollection load() = 0;
 
     ~BookmarkCollectionStorageBackend() = default;

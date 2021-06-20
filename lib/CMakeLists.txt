@@ -5,7 +5,7 @@ set(booklib_sources
     #src/markdown/markdown_collection.cpp
     #src/markdown/markdown_import.cpp
     #src/markdown/markdown_export.cpp
-    #src/markdown/markdown_storage.cpp
+    src/markdown/markdown_storage.cpp
     src/bookmark.cpp
     src/collection.cpp
 )
@@ -24,6 +24,7 @@ add_library(booklib_tests OBJECT $<TARGET_PROPERTY:booklib,SOURCES>
     tests/test_bookmark.cpp
     #tests/test_cmdline.cpp
     #tests/test_markdown_collection.cpp
+    tests/test_markdown_storage.cpp
     tests/test_collection.cpp
     )
 target_link_libraries(booklib_tests PRIVATE $<TARGET_PROPERTY:booklib,LINK_LIBRARIES> doctest booklib_test_utils)

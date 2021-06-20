@@ -19,17 +19,12 @@ public:
 
     void save(const BookmarkCollection &collection) override;
 
-    /**
-     * @brief Loads a BookmarkCollection from Markdown.
-     *
-     * If the file is empty or it does not exist, this method returns an empty BookmarkCollection.
-     *
-     *
-     * @return BookmarkCollection read from the file
-     */
     BookmarkCollection load() override;
 
 private:
+    /**
+     * @brief Path of the Markdown file to be used for loading/saving BookmarkCollections
+     */
     std::string filepath_;
 };
 

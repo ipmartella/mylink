@@ -88,6 +88,21 @@ void MarkdownStorageBackend::save(const BookmarkCollection &collection)
 
 }
 
+/**
+* @brief Loads a BookmarkCollection from Markdown.
+*
+* If the file is empty or it does not exist, this method returns an empty BookmarkCollection.
+* The file is expected to contain at most one valid Bookmark per line (lines are delimited by '\n').
+* Valid line formats for Bookmarks are:
+* * url
+* - url
+* * [title](url)
+* - [title](url)
+*
+* Invalid lines are silently ignored. Leading and trailing whitespace is always trimmed.
+*
+* @return BookmarkCollection read from the file
+*/
 BookmarkCollection MarkdownStorageBackend::load()
 {
     std::ifstream stream{filepath_};

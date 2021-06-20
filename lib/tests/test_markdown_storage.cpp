@@ -28,4 +28,37 @@ SCENARIO("Reading BookmarkCollections from a file") {
             }
         }
     }
+
+    GIVEN("A file containing different formats of bookmarks") {
+        const std::string test_file_name = "/tmp/mylink_testload";
+        {
+            std::ofstream test_file{test_file_name, std::ios_base::out | std::ios_base::trunc};
+            test_file << "# My bookmarks\n";
+            test_file << "* http://www.url1.org\n";
+            test_file << "- http://www.url2.org\n";
+            test_file << "------------------------\n";
+            test_file << "* [Title3](http://www.url3.org)\n";
+            test_file << "- [Title4](http://www.url4.org)\n";
+            test_file << "* www.url5.org\t\t\r\n";
+            test_file << "\n";
+            test_file << "     - www.url6.org";
+            test_file.close();
+        }
+
+        WHEN("I load the BookmarkCollection") {
+            auto collection = MarkdownStorageBackend(test_file_name).load();
+
+            THEN("The BookmarkCollection contains the different Bookmarks") {
+                CHECK_EQ(collection.size(), 6);
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK(collection.contains("http://www.url2.org"));
+                CHECK_EQ(collection["http://www.url3.org"].get_title(), "Title3");
+                CHECK_EQ(collection["http://www.url4.org"].get_title(), "Title4");
+                CHECK(collection.contains("http://www.url5.org"));
+                CHECK(collection.contains("http://www.url6.org"));
+            }
+        }
+    }
+
+
 }

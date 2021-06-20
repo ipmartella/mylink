@@ -77,6 +77,22 @@ BookmarkCollection read_bookmarks_from_stream(std::istream& stream) {
     return bookmarks;
 }
 
+std::string escape_link_title(const std::string& title) {
+    static const std::regex square_bracket_regex{R"((\[|\]))"};
+    return std::regex_replace(title, square_bracket_regex, "\\$&");
+}
+
+std::string convert_to_markdown_line(const Bookmark& bookmark) {
+    std::stringstream markdown_line_builder;
+    markdown_line_builder << "- ";
+    if(bookmark.get_title().empty()) {
+        markdown_line_builder << bookmark.get_url();
+    } else {
+        markdown_line_builder << "[" << escape_link_title(bookmark.get_title()) << "](" << bookmark.get_url() << ")";
+    }
+    return markdown_line_builder.str();
+}
+
 } //namespace
 
 
@@ -93,12 +109,17 @@ MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : fi
  * Each Bookmark in the given <collection> is stored in the file on a separate line, terminated by '\n'.
  *
  * If the collection is empty, a empty file will be written (existing files will be truncated).
+ * For each Bookmark in the BookmarkCollection without title, this method will add a line to the file with the following format:
+ * - url
  *
  * @param collection BookmarkCollection to save.
  */
 void MarkdownStorageBackend::save(const BookmarkCollection &collection)
 {
     std::ofstream output_file{filepath_, std::ios_base::out | std::ios_base::trunc};
+    for(const auto& bookmark : collection) {
+        output_file << convert_to_markdown_line(bookmark) << '\n';
+    }
 }
 
 /**
@@ -277,4 +298,23 @@ SCENARIO("Convert Markdown stream to Bookmarks") {
     }
 }
 
+SCENARIO("Convert Bookmark to Markdown line") {
+    GIVEN("A bookmark with a plain URL") {
+        Bookmark plain_url_bookmark("http://www.wikipedia.org");
+
+        WHEN("The bookmark is exported") {
+            std::string markdown_line = convert_to_markdown_line(plain_url_bookmark);
+            THEN("The line is like: - http://www.url.org") {
+                CHECK_EQ(markdown_line, "- http://www.wikipedia.org");
+            }
+        }
+    }
+}
+
+
+//"- http://www.wikipedia.org\n"
+//"- http://www.url.org\n"
+//"- [Test URL](http://www.mytesturl.org/test/index)\n"
+//"- [\\[Title with square brackets\\]](http://www.mytesturl.org/test/square)\n");
+//
 #endif

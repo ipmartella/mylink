@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace mylink;
 
@@ -18,6 +19,11 @@ std::vector<std::string> read_lines_from_file(const std::string& filepath) {
 
     return lines;
 }
+
+bool lines_contain_string(const std::vector<std::string>& lines, const std::string& line) {
+    return std::find(lines.begin(), lines.end(), line) != lines.end();
+}
+
 
 } //namespace
 
@@ -106,4 +112,34 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
             }
         }
     }
+
+    GIVEN("A non-empty BookmarkCollection") {
+        BookmarkCollection collection;
+        std::vector<Bookmark> bookmarks = {
+            Bookmark("http://www.url1.org"),
+            Bookmark("http://www.url2.org"),
+            //Bookmark("http://www.url3.org", "Title 3"),
+            //Bookmark("http://www.url4.org", "Title 4"),
+        };
+
+        for(const auto& bookmark : bookmarks) {
+            collection.add(bookmark);
+        }
+
+        WHEN("I write the BookmarkCollection to a empty file") {
+            const std::string test_file = "/tmp/mylink_save2";
+            std::remove(test_file.c_str());
+
+            MarkdownStorageBackend(test_file).save(collection);
+
+            THEN("The Bookmarks are in the file") {
+                auto lines = read_lines_from_file(test_file);
+                CHECK_EQ(lines.size(), bookmarks.size());
+                CHECK(lines_contain_string(lines, "- http://www.url1.org"));
+                CHECK(lines_contain_string(lines, "- http://www.url2.org"));
+            }
+        }
+    }
+
+
 }

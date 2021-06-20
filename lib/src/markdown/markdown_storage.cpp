@@ -80,12 +80,25 @@ BookmarkCollection read_bookmarks_from_stream(std::istream& stream) {
 } //namespace
 
 
+/**
+* @brief Construct a new MarkdownStorageBackend, backed by a disk file named <filepath>.
+* @param filepath Path of the Markdown file to save/load. The path must be accessible by the running process.
+*/
 MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : filepath_(filename)
 { }
 
+/**
+ * @brief Saves a BookmarkCollection to Markdown.
+ *
+ * Each Bookmark in the given <collection> is stored in the file on a separate line, terminated by '\n'.
+ *
+ * If the collection is empty, a empty file will be written (existing files will be truncated).
+ *
+ * @param collection BookmarkCollection to save.
+ */
 void MarkdownStorageBackend::save(const BookmarkCollection &collection)
 {
-
+    std::ofstream output_file{filepath_, std::ios_base::out | std::ios_base::trunc};
 }
 
 /**

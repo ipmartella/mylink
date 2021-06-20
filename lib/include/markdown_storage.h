@@ -6,19 +6,13 @@
 namespace mylink {
 
 /**
- * @brief Stores and loads BookmarkCollection objects to Markdown files.
- *
+ * @brief Stores and loads a BookmarkCollection to/from a given Markdown file.
  */
 class MarkdownStorageBackend : public BookmarkCollectionStorageBackend {
 public:
-    /**
-     * @brief Construct a new MarkdownStorageBackend, backed by a disk file named <filepath>.
-     * @param filepath Path of the Markdown file to save/load. The path must be accessible by the running process.
-     */
     MarkdownStorageBackend(const std::string& filepath);
 
     void save(const BookmarkCollection &collection) override;
-
     BookmarkCollection load() override;
 
 private:

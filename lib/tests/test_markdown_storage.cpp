@@ -1,8 +1,25 @@
 #include <doctest.h>
 #include <markdown_storage.h>
 #include <fstream>
+#include <string>
+#include <vector>
 
 using namespace mylink;
+
+namespace {
+
+std::vector<std::string> read_lines_from_file(const std::string& filepath) {
+    std::vector<std::string> lines;
+    std::ifstream input_file{filepath};
+
+    for(std::string line; std::getline(input_file, line, '\n');) {
+        lines.push_back(line);
+    }
+
+    return lines;
+}
+
+} //namespace
 
 SCENARIO("Reading BookmarkCollections from a file") {
     GIVEN("A non-existing file") {
@@ -59,6 +76,34 @@ SCENARIO("Reading BookmarkCollections from a file") {
             }
         }
     }
+}
 
+SCENARIO("Writing BookmarkCollections to Markdown") {
+    GIVEN("A empty BookmarkCollection") {
+        const BookmarkCollection empty_collection;
 
+        WHEN("I save the collection to a new file") {
+            const std::string test_file = "/tmp/mylink_save1";
+            std::remove(test_file.c_str());
+
+            MarkdownStorageBackend(test_file).save(empty_collection);
+
+            THEN("The file is empty") {
+                auto lines = read_lines_from_file(test_file);
+            }
+        }
+        WHEN("I save the collection to an existing file") {
+            const std::string test_file = "/tmp/mylink_save1";
+            {
+                std::ofstream tmp_file(test_file);
+                tmp_file << "TEST TEST\n";
+            }
+
+            MarkdownStorageBackend(test_file).save(empty_collection);
+
+            THEN("The file is empty") {
+                auto lines = read_lines_from_file(test_file);
+            }
+        }
+    }
 }

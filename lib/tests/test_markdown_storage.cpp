@@ -20,6 +20,11 @@ std::vector<std::string> read_lines_from_file(const std::string& filepath) {
     return lines;
 }
 
+void write_string_to_file(const std::string& filepath, const std::string& content) {
+    std::ofstream output_file(filepath);
+    output_file << content;
+}
+
 bool lines_contain_string(const std::vector<std::string>& lines, const std::string& line) {
     return std::find(lines.begin(), lines.end(), line) != lines.end();
 }
@@ -100,10 +105,7 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
         }
         WHEN("I save the collection to an existing file") {
             const std::string test_file = "/tmp/mylink_save1";
-            {
-                std::ofstream tmp_file(test_file);
-                tmp_file << "TEST TEST\n";
-            }
+            write_string_to_file(test_file, "TEST TEST\n");
 
             MarkdownStorageBackend(test_file).save(empty_collection);
 
@@ -118,8 +120,8 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
         std::vector<Bookmark> bookmarks = {
             Bookmark("http://www.url1.org"),
             Bookmark("http://www.url2.org"),
-            //Bookmark("http://www.url3.org", "Title 3"),
-            //Bookmark("http://www.url4.org", "Title 4"),
+            Bookmark("http://www.url3.org", "Title 3"),
+            Bookmark("http://www.url4.org", "Title [4]"),
         };
 
         for(const auto& bookmark : bookmarks) {
@@ -137,6 +139,24 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
                 CHECK_EQ(lines.size(), bookmarks.size());
                 CHECK(lines_contain_string(lines, "- http://www.url1.org"));
                 CHECK(lines_contain_string(lines, "- http://www.url2.org"));
+                CHECK(lines_contain_string(lines, "- [Title 3](http://www.url3.org)"));
+                CHECK(lines_contain_string(lines, R"(- [Title \[4\]](http://www.url4.org))"));
+            }
+        }
+
+        WHEN("I write the BookmarkCollection to a non-empty file") {
+            const std::string test_file = "/tmp/mylink_save3";
+            write_string_to_file(test_file, "TEST TEST\n");
+
+            MarkdownStorageBackend(test_file).save(collection);
+
+            THEN("The Bookmarks are in the file") {
+                auto lines = read_lines_from_file(test_file);
+                CHECK_EQ(lines.size(), bookmarks.size());
+                CHECK(lines_contain_string(lines, "- http://www.url1.org"));
+                CHECK(lines_contain_string(lines, "- http://www.url2.org"));
+                CHECK(lines_contain_string(lines, "- [Title 3](http://www.url3.org)"));
+                CHECK(lines_contain_string(lines, R"(- [Title \[4\]](http://www.url4.org))"));
             }
         }
     }

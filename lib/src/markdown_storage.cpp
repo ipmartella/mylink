@@ -112,6 +112,12 @@ MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : fi
  * For each Bookmark in the BookmarkCollection without title, this method will add a line to the file with the following format:
  * - url
  *
+ * For each Bookmark in the BookmarkCollection with a title, this method will add a line to the file with the following format:
+ * - [title](url)
+ *
+ * Square brackets in the title will be escaped with a backslash (i.e. "My [blog]" --> "My \[blog\]")
+ *
+ *
  * @param collection BookmarkCollection to save.
  */
 void MarkdownStorageBackend::save(const BookmarkCollection &collection)

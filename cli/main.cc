@@ -1,13 +1,7 @@
-#include <commandlineparser.h>
-#include <markdown_collection.h>
-
-using namespace mylink;
+#include <string>
+#include "cli.h"
 
 int main(int argc, const char **argv)
 {
-    MarkdownCollection collection("links.md");
-    CommandLineParser parser(collection, std::cout);
-    parser.parse(argc, argv);
-
-    return 0;
+    return mylink::cli::command_line_shell(argc, argv, std::cout);
 }

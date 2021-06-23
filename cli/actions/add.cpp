@@ -1,5 +1,8 @@
 #include "../actions.h"
 
+using namespace mylink::cli;
+
+
 /**
  * @brief mylink "add" subcommand implementation
  *
@@ -20,14 +23,16 @@
  */
 int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
     constexpr int positional_idx_url = 2;
+    const CommandLineParameter parameter_title{"-t", "--title"};
 
     try {
         //Parse command line
-        ParsedCommandLine cmd_line(argc, argv);
+        ParsedCommandLine cmd_line(argc, argv, {parameter_title});
         std::string url = cmd_line.getPositional(positional_idx_url);
+        std::string title = cmd_line.getParameter(parameter_title, "");
 
         auto collection = backend.load();
-        collection.add(Bookmark{url});
+        collection.add(Bookmark{url, title});
         backend.save(collection);
 
         return 0;

@@ -1,7 +1,9 @@
 #include <string>
 #include "cli.h"
+#include <markdown_storage.h>
 
 int main(int argc, const char **argv)
 {
-    return mylink::cli::command_line_shell(argc, argv, std::cout);
+    mylink::MarkdownStorageBackend backend("links.md");
+    return mylink::cli::command_line_shell(argc, argv, backend);
 }

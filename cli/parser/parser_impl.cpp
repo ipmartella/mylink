@@ -15,9 +15,9 @@ auto get_parameter(argh::parser& parser, const CommandLineParameter& parameter) 
 
 auto get_parameter(argh::parser& parser, const CommandLineParameter& parameter, const std::string& default_value) {
     if(parameter.has_long_version()) {
-        return parser({parameter.get_short_version()}, default_value);
-    } else {
         return parser({parameter.get_short_version().c_str(), parameter.get_long_version().c_str()}, default_value);
+    } else {
+        return parser({parameter.get_short_version()}, default_value);
     }
 }
 

@@ -1,4 +1,7 @@
 #include "cli.h"
+#include "actions.h"
+
+using namespace mylink;
 
 namespace  {
 
@@ -34,22 +37,23 @@ std::string parse_action_from_command_line(int argc, const char** argv) {
  *
  * @param argc Number of command line arguments (as specified in standard C)
  * @param argv Array of command line arguments (as specified in standard C)
+ * @param backend Storage backend to use for saving/loading the BookmarkCollection
  * @param stdout Output stream to use as standard output
  * @return 0 (for now)
  */
-int mylink::cli::command_line_shell(int argc, const char** argv, std::ostream& stdout) {
+int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
     const auto action = parse_action_from_command_line(argc, argv);
 
-    if(action.empty()) {
-        stdout << commandline_usage();
+    if(action == "add") {
+        return action_add(argc, argv, backend, stdout);
     } else {
-        stdout << action << "\n";
+        stdout << basic_usage();
     }
 
     return 0;
 }
 
-std::string mylink::cli::commandline_usage() {
+std::string mylink::cli::basic_usage() {
     return "Usage: mylink <command> [<args>]\n"
            "\n"
            "Available commands:\n"

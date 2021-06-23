@@ -27,18 +27,21 @@ int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStora
 
     try {
         //Parse command line
-        ParsedCommandLine cmd_line(argc, argv, {parameter_title});
-        std::string url = cmd_line.getPositional(positional_idx_url);
-        std::string title = cmd_line.getParameter(parameter_title, "");
+        const ParsedCommandLine cmd_line(argc, argv, {parameter_title});
+        const std::string url = cmd_line.getPositional(positional_idx_url);
+        const std::string title = cmd_line.getParameter(parameter_title, "");
 
+        //Add new Bookmark to collection
         auto collection = backend.load();
         collection.add(Bookmark{url, title});
         backend.save(collection);
 
         return 0;
     } catch(std::out_of_range&) {
+        //The URL was provided from the command line
         stdout << action_add_usage();
     } catch(std::invalid_argument&) {
+        //The provided URL was invalid
         stdout << action_add_usage();
     }
     return -1;

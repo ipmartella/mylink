@@ -117,6 +117,7 @@ MarkdownStorageBackend::MarkdownStorageBackend(const std::string &filename) : fi
  *
  * Square brackets in the title will be escaped with a backslash (i.e. "My [blog]" --> "My \[blog\]")
  *
+ * The order in which Bookmarks are written to file is not specified.
  *
  * @param collection BookmarkCollection to save.
  */

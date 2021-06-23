@@ -1,6 +1,5 @@
 #include "server.h"
 #include <httplib.h>
-#include <markdown_collection.h>
 #include <json.hpp>
 #include <functional>
 
@@ -55,7 +54,7 @@ Bookmark build_bookmark_from_add_request(const std::string& add_request_body) {
 
 } //namespace
 
-Server::Server(BookmarkCollection &collection) : collection_{collection}, http_server_{}
+Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, http_server_{}
 {
     http_server_.Options(server_url_bookmarks.c_str(), allow_cors_from_any_origin);
 
@@ -85,7 +84,11 @@ void Server::handle_add_bookmark_request_(const httplib::Request& request, httpl
     setup_response_to_allow_cors(response);
     try {
         Bookmark bookmark_to_add = build_bookmark_from_add_request(request.body);
-        collection_.add(bookmark_to_add);
+
+        auto collection = backend_.load();
+        collection.add(bookmark_to_add);
+        backend_.save(collection);
+
         response.status = HttpErrorCode::OK;
     } catch(HttpParseException) {
         response.status = HttpErrorCode::BAD_REQUEST;

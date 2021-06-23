@@ -1,12 +1,12 @@
-#include <markdown_collection.h>
 #include "server.h"
+#include <markdown_storage.h>
 
 using namespace mylink;
 
 int main(void)
 {
-    MarkdownCollection collection("links.md");
-    Server svr{collection};
+    MarkdownStorageBackend backend("links.md");
+    Server svr{backend};
 
     svr.start();
     return 0;

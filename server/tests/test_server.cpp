@@ -1,8 +1,8 @@
 #include <httplib.h>
 #include <thread>
 #include <doctest.h>
-#include <mock_collection.h>
 #include "../server.h"
+#include "../../tests/mock_storage_backend.h"
 
 using namespace mylink;
 using namespace mylink::test;
@@ -34,8 +34,8 @@ void stop_server_and_thread(Server& server, std::thread& thread) {
 
 SCENARIO("Add bookmark") {
     GIVEN("A MylinkServer") {
-        MockCollection collection;
-        Server server(collection);
+        MockStorageBackend backend;
+        Server server(backend);
 
         std::thread server_thread = start_server_in_another_thread(server);
         httplib::Client client{server_default_host, server_default_port};
@@ -46,6 +46,7 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
+                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
@@ -55,6 +56,7 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
+                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
@@ -65,6 +67,7 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
+                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
@@ -77,9 +80,10 @@ SCENARIO("Add bookmark") {
             THEN("The bookmark is added to the collection without title") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::OK);
-                REQUIRE_EQ(collection.readAddCalls().size(), 1);
-                CHECK_EQ(collection.readAddCalls()[0].get_url(), "https://www.wikipedia.org");
-                CHECK_EQ(collection.readAddCalls()[0].get_title(), "");
+                auto collection = backend.get_saved_collection();
+                REQUIRE(collection);
+                CHECK_EQ(collection->size(), 1);
+                CHECK_EQ((*collection)["https://www.wikipedia.org"].get_title(), "");
             }
         }
 
@@ -91,9 +95,10 @@ SCENARIO("Add bookmark") {
             THEN("The bookmark is added to the collection with the specified title") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::OK);
-                REQUIRE_EQ(collection.readAddCalls().size(), 1);
-                CHECK_EQ(collection.readAddCalls()[0].get_url(), "https://www.wikipedia.org");
-                CHECK_EQ(collection.readAddCalls()[0].get_title(), "Wikipedia");
+                auto collection = backend.get_saved_collection();
+                REQUIRE(collection);
+                CHECK_EQ(collection->size(), 1);
+                CHECK_EQ((*collection)["https://www.wikipedia.org"].get_title(), "Wikipedia");
             }
         }
 

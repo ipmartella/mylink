@@ -1,20 +1,20 @@
 #ifndef SERVER_H
 #define SERVER_H
-#include <collection.h>
 #include <httplib.h>
+#include <collection_storage.h>
 
 
 namespace mylink {
 class Server
 {
 public:
-    Server(BookmarkCollection& collection);
+    Server(BookmarkCollectionStorageBackend& backend);
     void start();
     void stop();
     bool is_started() const;
 
 private:
-    BookmarkCollection& collection_;
+    BookmarkCollectionStorageBackend& backend_;
     httplib::Server http_server_;
     void handle_add_bookmark_request_(const httplib::Request& request, httplib::Response& response);
 };

@@ -11,7 +11,9 @@ namespace {
 
 enum HttpErrorCode {
     OK = 200,
+    CREATED = 201,
     BAD_REQUEST = 400,
+    CONFLICT = 409,
 };
 
 
@@ -46,7 +48,6 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
-                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
@@ -56,7 +57,6 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
-                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
@@ -67,10 +67,19 @@ SCENARIO("Add bookmark") {
             THEN("A Bad Request HTTP error code is returned") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
-                CHECK_FALSE(backend.get_saved_collection());
             }
         }
 
+        WHEN("I send a POST request for adding a bookmark with an invalid URL") {
+            auto result = client.Post(server_url_bookmarks.c_str(),
+                                      R"({"url":"---------"})",
+                                      "text/json");
+
+            THEN("A Bad Request HTTP error code is returned") {
+                REQUIRE_EQ(result.error(), httplib::Error::Success);
+                CHECK_EQ(result->status, HttpErrorCode::BAD_REQUEST);
+            }
+        }
 
         WHEN("I send a POST request for adding a bookmark with just the URL") {
             auto result = client.Post(server_url_bookmarks.c_str(),
@@ -79,11 +88,10 @@ SCENARIO("Add bookmark") {
 
             THEN("The bookmark is added to the collection without title") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
-                CHECK_EQ(result->status, HttpErrorCode::OK);
-                auto collection = backend.get_saved_collection();
-                REQUIRE(collection);
-                CHECK_EQ(collection->size(), 1);
-                CHECK_EQ((*collection)["https://www.wikipedia.org"].get_title(), "");
+                CHECK_EQ(result->status, HttpErrorCode::CREATED);
+                auto collection = backend.load();
+                CHECK_EQ(collection.size(), 1);
+                CHECK_EQ(collection["https://www.wikipedia.org"].get_title(), "");
             }
         }
 
@@ -94,11 +102,28 @@ SCENARIO("Add bookmark") {
 
             THEN("The bookmark is added to the collection with the specified title") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
-                CHECK_EQ(result->status, HttpErrorCode::OK);
-                auto collection = backend.get_saved_collection();
-                REQUIRE(collection);
-                CHECK_EQ(collection->size(), 1);
-                CHECK_EQ((*collection)["https://www.wikipedia.org"].get_title(), "Wikipedia");
+                CHECK_EQ(result->status, HttpErrorCode::CREATED);
+                auto collection = backend.load();
+                CHECK_EQ(collection.size(), 1);
+                CHECK_EQ(collection["https://www.wikipedia.org"].get_title(), "Wikipedia");
+            }
+        }
+
+        WHEN("I send a POST request for adding a bookmark that already exists") {
+            BookmarkCollection initial_collection;
+            initial_collection.add(Bookmark{"https://www.wikipedia.org", "Wikipedia"});
+            backend.save(initial_collection);
+
+            auto result = client.Post(server_url_bookmarks.c_str(),
+                                      R"({"url":"https://www.wikipedia.org", "title": "Another wiki"})",
+                                      "text/json");
+
+            THEN("The bookmark is NOT added to the collection") {
+                REQUIRE_EQ(result.error(), httplib::Error::Success);
+                CHECK_EQ(result->status, HttpErrorCode::CONFLICT);
+                auto collection = backend.load();
+                CHECK_EQ(collection.size(), 1);
+                CHECK_EQ(collection["https://www.wikipedia.org"].get_title(), "Wikipedia");
             }
         }
 

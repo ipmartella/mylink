@@ -99,9 +99,8 @@ SCENARIO("Add bookmark") {
             auto result = run_mylink_with_args({"add", "http://www.url1.org"});
 
             THEN("The stored collection contains http://www.url1.org") {
-                auto collection = result.backend.get_saved_collection();
-                REQUIRE(collection);
-                CHECK(collection->contains("http://www.url1.org"));
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
                 CHECK_EQ(result.return_code, 0);
             }
         }
@@ -112,10 +111,9 @@ SCENARIO("Add bookmark") {
             auto result = run_mylink_with_args({"add", "http://www.url1.org", "-t", "Title1"});
 
             THEN("The stored collection contains http://www.url1.org with title Title1") {
-                auto collection = result.backend.get_saved_collection();
-                REQUIRE(collection);
-                CHECK(collection->contains("http://www.url1.org"));
-                CHECK_EQ((*collection)["http://www.url1.org"].get_title(), "Title1");
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(collection["http://www.url1.org"].get_title(), "Title1");
                 CHECK_EQ(result.return_code, 0);
             }
         }
@@ -126,10 +124,9 @@ SCENARIO("Add bookmark") {
             auto result = run_mylink_with_args({"add", "http://www.url1.org", "--title", "Title1"});
 
             THEN("The stored collection contains http://www.url1.org with title Title1") {
-                auto collection = result.backend.get_saved_collection();
-                REQUIRE(collection);
-                CHECK(collection->contains("http://www.url1.org"));
-                CHECK_EQ((*collection)["http://www.url1.org"].get_title(), "Title1");
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(collection["http://www.url1.org"].get_title(), "Title1");
                 CHECK_EQ(result.return_code, 0);
             }
         }

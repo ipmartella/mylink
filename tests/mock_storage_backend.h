@@ -15,17 +15,11 @@ public:
     void save(const mylink::BookmarkCollection &collection) override;
     mylink::BookmarkCollection load() override;
     void reset();
-    std::shared_ptr<mylink::BookmarkCollection> get_saved_collection() const;
-    void set_loaded_collection(const BookmarkCollection& collection);
-
 
     ~MockStorageBackend() = default;
 
-
-
 private:
-    std::shared_ptr<mylink::BookmarkCollection> saved_collection_ = nullptr;
-    std::shared_ptr<mylink::BookmarkCollection> loaded_collection_ = nullptr;
+    mylink::BookmarkCollection collection_;
 };
 
 } //namespace test

@@ -5,6 +5,16 @@
 
 
 namespace mylink {
+/**
+ * @brief mylink::Server allows you to interact with a BookmarkCollection via HTTP requests.
+ *
+ * The server exposes a HTTP endpoint at <server_default_host>:<server_default_port>/<server_url_bookmarks>.
+ * The endpoint currently support the following HTTP methods:
+ * - POST :: Adds a new Bookmark to the BookmarkCollection. See Server::handle_add_bookmark_request_ for details.
+ * - OPTIONS :: Allows Cross Origin Resource Sharing (CORS) from any domain. This is needed if you want to interact with the server using bookmarklets
+ *
+ * The BookmarkCollection manipulated by the server is loaded/saved using the given BookmarkCollectionStorageBackend.
+ */
 class Server
 {
 public:

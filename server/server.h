@@ -10,6 +10,7 @@ namespace mylink {
  *
  * The server exposes a HTTP endpoint at <server_default_host>:<server_default_port>/<server_url_bookmarks>.
  * The endpoint currently support the following HTTP methods:
+ * - GET :: Gets all Bookmarks from the BookmarkCollection. See Server::handle_get_bookmark_request_ for details.
  * - POST :: Adds a new Bookmark to the BookmarkCollection. See Server::handle_add_bookmark_request_ for details.
  * - OPTIONS :: Allows Cross Origin Resource Sharing (CORS) from any domain. This is needed if you want to interact with the server using bookmarklets
  *
@@ -27,6 +28,7 @@ private:
     BookmarkCollectionStorageBackend& backend_;
     httplib::Server http_server_;
     void handle_add_bookmark_request_(const httplib::Request& request, httplib::Response& response);
+    void handle_get_bookmark_request_(const httplib::Request& request, httplib::Response& response);
 };
 
 const std::string server_default_host{"localhost"};

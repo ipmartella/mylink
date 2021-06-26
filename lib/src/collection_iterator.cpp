@@ -22,6 +22,11 @@ BookmarkCollection::const_iterator BookmarkCollection::end() const
     return const_iterator(bookmarks_.end());
 }
 
+bool BookmarkCollection::operator==(const BookmarkCollection &other) const
+{
+    return bookmarks_ == other.bookmarks_;
+}
+
 BookmarkCollection::iterator::iterator() : underlying_iterator_{} {}
 
 BookmarkCollection::iterator::iterator(BookmarkCollection::bookmark_container_type::iterator underlying_iterator) : underlying_iterator_{underlying_iterator} {}

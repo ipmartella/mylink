@@ -1,15 +1,11 @@
 #include "server.h"
 #include <httplib.h>
-#include <json.hpp>
 #include <functional>
+#include "bookmark_json_converter.h"
 
 using namespace mylink;
-using namespace nlohmann;
 
 namespace {
-
-const std::string json_field_url = "url";
-const std::string json_field_title = "title";
 
 class HttpParseException : public std::invalid_argument {
 public:
@@ -37,23 +33,6 @@ void allow_cors_from_any_origin(const httplib::Request&, httplib::Response& resp
 }
 
 
-Bookmark build_bookmark_from_add_request(const std::string& add_request_body) {
-    json add_request;
-    try {
-        add_request = json::parse(add_request_body);
-    } catch(json::parse_error) {
-        throw HttpParseException("Invalid JSON format");
-    }
-
-    if(!add_request.contains(json_field_url)) {
-        throw HttpParseException("The request MUST contain the 'url' field");
-    }
-
-
-    return Bookmark{add_request[json_field_url], add_request.value(json_field_title, "")};
-}
-
-
 } //namespace
 
 /**
@@ -66,6 +45,9 @@ Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, h
 
     http_server_.Post(server_url_bookmarks.c_str(), [&](const httplib::Request& request, httplib::Response& response) {
         handle_add_bookmark_request_(request, response);
+    });
+    http_server_.Get(server_url_bookmarks.c_str(), [&](const httplib::Request& request, httplib::Response& response) {
+        handle_get_bookmark_request_(request, response);
     });
 
 }
@@ -98,21 +80,19 @@ bool Server::is_started() const
 /**
  * @brief Handles POST HTTP requests to add a Bookmark to this server BookmarkCollection.
  *
- * The body of the request must be a JSON object with at least the following fields (additional fields will be ignored):
- * - url: (string - mandatory) URL of the Bookmark
- * - title: (string - optional) Title of the Bookmark. By default it will be an empty string
+ * The body of the request must comply with the format specified in the documentation of mylink::server_utils::parse_bookmark_from_json.
  *
  * If the request has a valid format, and the new Bookmark has been added to the BookmarkCollection, the HTTP result code will be set to HTTP_CREATED.
  * If the request has a valid format, but the Bookmark already exists in the BookmarkCollection, the HTTP result code will be set to HTTP_CONFLICT.
  * If the request does not have a valid format, or the Bookmark is invalid,  the HTTP result code will be set to HTTP_BAD_REQUEST.
  *
- * @param request
- * @param response
+ * @param request HTTP Request to process
+ * @param response HTTP Response to return to the client
  */
 void Server::handle_add_bookmark_request_(const httplib::Request& request, httplib::Response& response){
     setup_response_to_allow_cors(response);
     try {
-        Bookmark bookmark_to_add = build_bookmark_from_add_request(request.body);
+        Bookmark bookmark_to_add = server_utils::parse_bookmark_from_json(request.body);
 
         auto collection = backend_.load();
 
@@ -127,11 +107,26 @@ void Server::handle_add_bookmark_request_(const httplib::Request& request, httpl
             //Bookmark already exists
             response.status = HttpErrorCode::CONFLICT;
         }
-    } catch(HttpParseException&) {
-        //HTTP Request format is not valid
-        response.status = HttpErrorCode::BAD_REQUEST;
     } catch(std::invalid_argument&) {
-        //Bookmark format is not valid
+        //Invalid request format or invalid Bookmark
         response.status = HttpErrorCode::BAD_REQUEST;
     }
+}
+
+/**
+ * @brief Handles GET HTTP requests to read all Bookmarks from this server BookmarkCollection.
+ *
+ * The HTTP response will be formatted as (a possibly empty) JSON array of Bookmark objects.
+ * Each Bookmark object is formatted according to the format described in the documentation of mylink::server_utils::parse_bookmark_from_json.
+ *
+ * HTTP GET request parameters (URL params) are ignored by this method.
+ * The response code is always HTTP_OK (unless major server errors occur).
+ *
+ * @param request HTTP Request to process
+ * @param response HTTP Response to return to the client
+ */
+void Server::handle_get_bookmark_request_(const httplib::Request& request, httplib::Response& response){
+    setup_response_to_allow_cors(response);
+    response.body = server_utils::covert_collection_to_json(backend_.load());
+    response.status = HttpErrorCode::OK;
 }

@@ -69,6 +69,8 @@ public:
     const_iterator begin() const;
     const_iterator end() const;
 
+    bool operator==(const BookmarkCollection& other) const;
+
     virtual ~BookmarkCollection() = default;
 
 private:

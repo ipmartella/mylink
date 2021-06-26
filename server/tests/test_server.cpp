@@ -2,6 +2,7 @@
 #include <thread>
 #include <doctest.h>
 #include "../server.h"
+#include "../bookmark_json_converter.h"
 #include "../../tests/mock_storage_backend.h"
 
 using namespace mylink;
@@ -124,6 +125,46 @@ SCENARIO("Add bookmark") {
                 auto collection = backend.load();
                 CHECK_EQ(collection.size(), 1);
                 CHECK_EQ(collection["https://www.wikipedia.org"].get_title(), "Wikipedia");
+            }
+        }
+
+        stop_server_and_thread(server, server_thread);
+    }
+}
+
+SCENARIO("Get Bookmarks") {
+    GIVEN("A MylinkServer") {
+        MockStorageBackend backend;
+        Server server(backend);
+
+        std::thread server_thread = start_server_in_another_thread(server);
+        httplib::Client client{server_default_host, server_default_port};
+
+        WHEN("I send a GET request and, the BookmarkCollection on the server is empty") {
+            auto result = client.Get(server_url_bookmarks.c_str());
+
+            THEN("I get an empty JSON array in the answer") {
+                REQUIRE_EQ(result.error(), httplib::Error::Success);
+                CHECK_EQ(result->status, HttpErrorCode::OK);
+                CHECK_EQ(result->body, "[]");
+            }
+        }
+
+        WHEN("I send a GET request and, the BookmarkCollection contains a few Bookmarks") {
+            BookmarkCollection existing_collection;
+            existing_collection.add(Bookmark{"http://www.url1.org", "URL1"});
+            existing_collection.add(Bookmark{"http://www.url2.org", "URL1"});
+            existing_collection.add(Bookmark{"http://www.url3.org"});
+            backend.save(existing_collection);
+
+            auto result = client.Get(server_url_bookmarks.c_str());
+
+            THEN("I get an JSON array with the initial Bookmarks") {
+                REQUIRE_EQ(result.error(), httplib::Error::Success);
+                CHECK_EQ(result->status, HttpErrorCode::OK);
+                auto result_collection = server_utils::parse_collection_from_json(result->body);
+
+                CHECK_EQ(result_collection, existing_collection);
             }
         }
 

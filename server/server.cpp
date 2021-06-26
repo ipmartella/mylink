@@ -7,11 +7,6 @@ using namespace mylink;
 
 namespace {
 
-class HttpParseException : public std::invalid_argument {
-public:
-    HttpParseException(std::string msg) : std::invalid_argument(msg) {}
-};
-
 enum HttpErrorCode {
     OK = 200,
     CREATED = 201,
@@ -125,8 +120,11 @@ void Server::handle_add_bookmark_request_(const httplib::Request& request, httpl
  * @param request HTTP Request to process
  * @param response HTTP Response to return to the client
  */
-void Server::handle_get_bookmark_request_(const httplib::Request& request, httplib::Response& response){
-    setup_response_to_allow_cors(response);
-    response.body = server_utils::covert_collection_to_json(backend_.load());
+void Server::handle_get_bookmark_request_(const httplib::Request&, httplib::Response& response){
+    constexpr const char* content_type_json = "application/json";
+
+    response.set_content(
+                server_utils::covert_collection_to_json(backend_.load()),
+                content_type_json);
     response.status = HttpErrorCode::OK;
 }

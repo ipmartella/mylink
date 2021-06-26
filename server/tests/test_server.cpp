@@ -162,6 +162,7 @@ SCENARIO("Get Bookmarks") {
             THEN("I get an JSON array with the initial Bookmarks") {
                 REQUIRE_EQ(result.error(), httplib::Error::Success);
                 CHECK_EQ(result->status, HttpErrorCode::OK);
+                CHECK_EQ(result->get_header_value("Content-Type"), "application/json");
                 auto result_collection = server_utils::parse_collection_from_json(result->body);
 
                 CHECK_EQ(result_collection, existing_collection);

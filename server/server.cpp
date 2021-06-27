@@ -45,6 +45,9 @@ Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, h
         handle_get_bookmark_request_(request, response);
     });
 
+
+    //Load Web resources to show MyLinks web page
+    http_server_.set_mount_point("/", server_web_resources_path.c_str());
 }
 
 /**

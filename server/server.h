@@ -34,6 +34,7 @@ private:
 const std::string server_default_host{"localhost"};
 constexpr int server_default_port = 1234;
 const std::string server_url_bookmarks{"/bookmarks"};
+const std::string server_web_resources_path{"./www"};
 
 } //namespace mylink
 

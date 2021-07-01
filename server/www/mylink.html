@@ -7,6 +7,7 @@
         <body>
                 <h1>MyLinks</h1>
                 <p id="error_msg"></p>
+                <p>Bookmarklet (drag it to your bookmark toolbar): <a onclick="return false" alt="Drag me to your Bookmark bar" href="javascript:(function()%7Bvar%20request%20%3D%20%7Burl%3A%20window.location.href%2Ctitle%3A%20document.title%7D%3Bwindow.fetch(%22http%3A%2F%2Flocalhost%3A1234%2Fbookmarks%22%2C%20%7Bmethod%3A%20'POST'%2Cheaders%3A%20%7B'Content-Type'%3A%20'application%2Fjson'%7D%2Cbody%3A%20JSON.stringify(request)%7D).then(response%20%3D%3E%20%7Bif%20(response.status%20%3D%3D%3D%20201)%20%7Balert(%22Added%20to%20mylinks!%22)%3B%7D%20else%20if%20(response.status%20%3D%3D%3D%20409)%20%7Balert(%22Link%20already%20exists%20in%20mylinks%22)%3B%7D%20else%20%7Balert(%22Couldn't%20add%20link%20to%20mylinks%20%3A(.%20Error%3A%20%22%20%2B%20response.status)%3B%7D%7D).catch(err%20%3D%3E%20%7Balert(%22Couldn't%20add%20link%20to%20mylinks%20%3A(.%20Are%20you%20sure%20mylinkserver%20is%20running%3F%22)%3B%7D)%7D)()">Add to mylinks</a></p>
                 <ul id="bookmark_list">
                         <li>List goes here</li>
                 </ul>

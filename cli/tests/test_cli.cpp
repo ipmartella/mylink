@@ -1,9 +1,9 @@
 #include <doctest.h>
-#include "cli.h"
-#include "actions.h"
+#include "../cli.h"
+#include "../actions.h"
 #include <sstream>
 #include <vector>
-#include "../tests/mock_storage_backend.h"
+#include "../../tests/mock_storage_backend.h"
 
 using namespace mylink;
 using namespace mylink::cli;

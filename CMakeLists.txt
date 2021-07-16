@@ -9,6 +9,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 add_subdirectory(ext)
 add_subdirectory(lib)
 add_subdirectory(cli)
-add_subdirectory(server)
 add_subdirectory(tests)
 

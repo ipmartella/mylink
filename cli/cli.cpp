@@ -46,6 +46,8 @@ int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollect
 
     if(action == "add") {
         return action_add(argc, argv, backend, stdout);
+    } else if(action == "server" ) {
+        return action_server(argc, argv, backend, stdout);
     } else {
         stdout << basic_usage();
     }
@@ -58,6 +60,7 @@ std::string mylink::cli::basic_usage() {
            "\n"
            "Available commands:\n"
            "add\tAdds a bookmark to a collection\n"
+           "server\tMakes your MyLink collection available to web browsers\n"
            "\n";
 }
 
@@ -87,6 +90,19 @@ SCENARIO("First level command line argument parsing") {
 
             THEN("I get 'add'") {
                 CHECK_EQ(action, "add");
+            }
+        }
+    }
+
+    GIVEN("Command line: mylink server") {
+        int argc = 2;
+        const char* argv[] = {"mylink", "server"};
+
+        WHEN("I get the action") {
+            auto action = parse_action_from_command_line(argc, argv);
+
+            THEN("I get 'server'") {
+                CHECK_EQ(action, "server");
             }
         }
     }

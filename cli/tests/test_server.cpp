@@ -1,8 +1,8 @@
 #include <httplib.h>
 #include <thread>
 #include <doctest.h>
-#include "../server.h"
-#include "../bookmark_json_converter.h"
+#include "../server/server.h"
+#include "../server/bookmark_json_converter.h"
 #include "../../tests/mock_storage_backend.h"
 
 using namespace mylink;

@@ -172,3 +172,24 @@ SCENARIO("Get Bookmarks") {
         stop_server_and_thread(server, server_thread);
     }
 }
+
+SCENARIO("Stop server") {
+    GIVEN("A MylinkServer") {
+        MockStorageBackend backend;
+        Server server(backend);
+
+        std::thread server_thread = start_server_in_another_thread(server);
+        httplib::Client client{server_default_host, server_default_port};
+
+        WHEN("I send a GET request to the 'stop' URL") {
+            client.Get(server_url_stop.c_str());
+
+            THEN("I get 404 instead of the list of bookmarks") {
+                auto result = client.Get(server_url_bookmarks.c_str());
+                REQUIRE_NE(result.error(), httplib::Error::Success);
+            }
+        }
+
+        stop_server_and_thread(server, server_thread);
+    }
+}

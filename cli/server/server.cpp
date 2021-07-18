@@ -37,7 +37,6 @@ void allow_cors_from_any_origin(const httplib::Request&, httplib::Response& resp
 Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, http_server_{}
 {
     http_server_.Options(server_url_bookmarks.c_str(), allow_cors_from_any_origin);
-
     http_server_.Post(server_url_bookmarks.c_str(), [&](const httplib::Request& request, httplib::Response& response) {
         handle_add_bookmark_request_(request, response);
     });
@@ -45,6 +44,9 @@ Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, h
         handle_get_bookmark_request_(request, response);
     });
 
+    http_server_.Get(server_url_stop.c_str(), [&](const httplib::Request&, httplib::Response&) {
+        stop();
+    });
 
     //Load Web resources to show MyLinks web page
     http_server_.set_mount_point("/", server_web_resources_path.c_str());

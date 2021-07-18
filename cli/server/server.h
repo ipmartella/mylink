@@ -14,6 +14,8 @@ namespace mylink {
  * - POST :: Adds a new Bookmark to the BookmarkCollection. See Server::handle_add_bookmark_request_ for details.
  * - OPTIONS :: Allows Cross Origin Resource Sharing (CORS) from any domain. This is needed if you want to interact with the server using bookmarklets
  *
+ * The server can be stopped by issuing a HTTP GET request at <server_default_host>:<server_default_port>/<server_url_stop>.
+ *
  * The BookmarkCollection manipulated by the server is loaded/saved using the given BookmarkCollectionStorageBackend.
  */
 class Server
@@ -34,6 +36,7 @@ private:
 const std::string server_default_host{"localhost"};
 constexpr int server_default_port = 1234;
 const std::string server_url_bookmarks{"/bookmarks"};
+const std::string server_url_stop{"/stop"};
 const std::string server_web_resources_path{"./www"};
 
 } //namespace mylink

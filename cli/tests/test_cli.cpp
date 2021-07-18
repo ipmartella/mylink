@@ -1,9 +1,11 @@
 #include <doctest.h>
+#include <future>
 #include "../cli.h"
 #include "../actions.h"
 #include <sstream>
 #include <vector>
 #include "../../tests/mock_storage_backend.h"
+#include "../server/server.h"
 
 using namespace mylink;
 using namespace mylink::cli;
@@ -140,5 +142,29 @@ SCENARIO("Add bookmark") {
             }
         }
     }
+}
 
+SCENARIO("Run server") {
+    using namespace std::chrono_literals;
+
+    httplib::Client client{server_default_host, server_default_port};
+
+    GIVEN("Command line: mylink server -h") {
+        WHEN("I run the executable") {
+            auto future_result = std::async(std::launch::async, run_mylink_with_args, std::vector<std::string>{"server", "-h"}, BookmarkCollection());
+            THEN("The usage string for 'server' is printed") {
+                auto wait_result = future_result.wait_for(10ms);
+
+                if(wait_result != std::future_status::ready) {
+                    client.Get(server_url_stop.c_str());
+                }
+
+                REQUIRE_EQ(wait_result, std::future_status::ready);
+                auto result = future_result.get();
+                CHECK_EQ(result.output, action_server_usage());
+            }
+        }
+    }
+
+    client.Get(server_url_stop.c_str());
 }

@@ -20,9 +20,15 @@ using namespace mylink::cli;
  * @param stdout Output stream to use as standard output
  * @return -1 if the command line is invalid. 0 otherwise
  */
-int mylink::cli::action_server(int , const char** , BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
-    Server svr{backend};
+int mylink::cli::action_server(int argc, const char** , BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
 
+    constexpr int expected_argc = 2; //mylinks server => 2 args
+    if(argc > expected_argc) {
+        stdout << action_server_usage();
+        return -1;
+    }
+
+    Server svr{backend};
     stdout << "MyLink server starting on http://localhost:1234\n";
     svr.start();
     return 0;

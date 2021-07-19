@@ -1,6 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 #include <httplib.h>
+#include <stdexcept>
 #include <collection_storage.h>
 
 
@@ -38,6 +39,11 @@ constexpr int server_default_port = 1234;
 const std::string server_url_bookmarks{"/bookmarks"};
 const std::string server_url_stop{"/stop"};
 const std::string server_web_resources_path{"./www"};
+
+class ServerSetupError : public std::logic_error {
+public:
+    ServerSetupError() : std::logic_error("Failed to setup server") {}
+};
 
 } //namespace mylink
 

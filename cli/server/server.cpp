@@ -33,6 +33,7 @@ void allow_cors_from_any_origin(const httplib::Request&, httplib::Response& resp
 /**
  * @brief Builds a new mylink::Server, which loads/saves its Bookmarks using the provided <backend>
  * @param backend BookmarkCollectionStorageBacked to use for loading/saving Bookmarks
+ * @throws mylink::ServerSetupError() if the static web page resources cannot be found
  */
 Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, http_server_{}
 {
@@ -49,7 +50,10 @@ Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, h
     });
 
     //Load Web resources to show MyLinks web page
-    http_server_.set_mount_point("/", server_web_resources_path.c_str());
+    const bool web_resources_ok = http_server_.set_mount_point("/", server_web_resources_path.c_str());
+    if(!web_resources_ok) {
+        throw mylink::ServerSetupError{};
+    }
 }
 
 /**

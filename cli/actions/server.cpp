@@ -28,10 +28,15 @@ int mylink::cli::action_server(int argc, const char** , BookmarkCollectionStorag
         return -1;
     }
 
-    Server svr{backend};
-    stdout << "MyLink server starting on http://localhost:1234\n";
-    svr.start();
-    return 0;
+    try {
+        Server svr{backend};
+        stdout << "MyLink server starting on http://localhost:1234\n";
+        svr.start();
+        return 0;
+    } catch(mylink::ServerSetupError) {
+        stdout << "ERROR: Could not load web resources. Is the 'www' folder available in the same path as the executable?\n";
+        return -2;
+    }
 }
 
 std::string mylink::cli::action_server_usage() {

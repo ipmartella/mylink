@@ -6,6 +6,7 @@ add_executable(bookmark_tests
     $<TARGET_OBJECTS:booklib_tests>
     $<TARGET_OBJECTS:argh_tests>
     $<TARGET_OBJECTS:json_tests>
+    $<TARGET_OBJECTS:cpp-httplib_tests>
     $<TARGET_OBJECTS:cli_tests>
     )
 

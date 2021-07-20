@@ -1,5 +1,6 @@
 set(MYLINK_COMMON_SOURCES
     cli.cpp
+    path_utils.cpp
     actions/add.cpp
     actions/server.cpp
     parser/parser_impl.cpp

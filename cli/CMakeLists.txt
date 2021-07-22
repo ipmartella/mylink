@@ -9,7 +9,7 @@ set(MYLINK_COMMON_SOURCES
     )
 
 
-add_executable(mylink main.cc ${MYLINK_COMMON_SOURCES})
+add_executable(mylink main.cpp ${MYLINK_COMMON_SOURCES})
 target_link_libraries(mylink PRIVATE booklib argh cpp-httplib pthread json)
 
 

@@ -3,6 +3,7 @@
 #include <httplib.h>
 #include <stdexcept>
 #include <collection_storage.h>
+#include "../path_utils.h"
 
 
 namespace mylink {
@@ -38,7 +39,7 @@ const std::string server_default_host{"localhost"};
 constexpr int server_default_port = 1234;
 const std::string server_url_bookmarks{"/bookmarks"};
 const std::string server_url_stop{"/stop"};
-const std::string server_web_resources_path{"./www"};
+const std::string server_web_resources_path{mylink::utils::get_current_executable_directory() + "www"};
 
 class ServerSetupError : public std::logic_error {
 public:

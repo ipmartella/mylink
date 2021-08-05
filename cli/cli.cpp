@@ -38,18 +38,18 @@ std::string parse_action_from_command_line(int argc, const char** argv) {
  * @param argc Number of command line arguments (as specified in standard C)
  * @param argv Array of command line arguments (as specified in standard C)
  * @param backend Storage backend to use for saving/loading the BookmarkCollection
- * @param stdout Output stream to use as standard output
+ * @param out_stream Output stream to use as standard output
  * @return 0 (for now)
  */
-int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
+int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& out_stream) {
     const auto action = parse_action_from_command_line(argc, argv);
 
     if(action == "add") {
-        return action_add(argc, argv, backend, stdout);
+        return action_add(argc, argv, backend, out_stream);
     } else if(action == "server" ) {
-        return action_server(argc, argv, backend, stdout);
+        return action_server(argc, argv, backend, out_stream);
     } else {
-        stdout << basic_usage();
+        out_stream << basic_usage();
     }
 
     return 0;

@@ -18,10 +18,10 @@ using namespace mylink::cli;
  * @param argc Number of command line arguments (as specified in standard C)
  * @param argv Array of command line arguments (as specified in standard C)
  * @param backend Storage backend to use for saving/loading the BookmarkCollection
- * @param stdout Output stream to use as standard output
+ * @param out_stream Output stream to use as standard output
  * @return -1 if the command line is invalid. 0 otherwise
  */
-int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
+int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& out_stream) {
     constexpr int positional_idx_url = 2;
     const CommandLineParameter parameter_title{"-t", "--title"};
 
@@ -39,10 +39,10 @@ int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStora
         return 0;
     } catch(std::out_of_range&) {
         //The URL was provided from the command line
-        stdout << action_add_usage();
+        out_stream << action_add_usage();
     } catch(std::invalid_argument&) {
         //The provided URL was invalid
-        stdout << action_add_usage();
+        out_stream << action_add_usage();
     }
     return -1;
 }

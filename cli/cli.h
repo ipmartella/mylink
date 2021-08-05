@@ -6,7 +6,7 @@
 namespace mylink {
 namespace cli {
 
-int command_line_shell(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& stdout = std::cout);
+int command_line_shell(int argc, const char** argv, BookmarkCollectionStorageBackend& backend, std::ostream& out_stream = std::cout);
 std::string basic_usage();
 
 } //namespace cli

@@ -17,24 +17,24 @@ using namespace mylink::cli;
  * @param argc Number of command line arguments (as specified in standard C)
  * @param argv Array of command line arguments (as specified in standard C)
  * @param backend Storage backend to use for saving/loading the BookmarkCollection
- * @param stdout Output stream to use as standard output
+ * @param out_stream Output stream to use as standard output
  * @return -1 if the command line is invalid. 0 otherwise
  */
-int mylink::cli::action_server(int argc, const char** , BookmarkCollectionStorageBackend& backend, std::ostream& stdout) {
+int mylink::cli::action_server(int argc, const char** , BookmarkCollectionStorageBackend& backend, std::ostream& out_stream) {
 
     constexpr int expected_argc = 2; //mylinks server => 2 args
     if(argc > expected_argc) {
-        stdout << action_server_usage();
+        out_stream << action_server_usage();
         return -1;
     }
 
     try {
         Server svr{backend};
-        stdout << "MyLink server starting on http://localhost:1234\n";
+        out_stream << "MyLink server starting on http://localhost:1234\n";
         svr.start();
         return 0;
     } catch(mylink::ServerSetupError) {
-        stdout << "ERROR: Could not load web resources. Is the 'www' folder available in the same path as the executable?\n";
+        out_stream << "ERROR: Could not load web resources. Is the 'www' folder available in the same path as the executable?\n";
         return -2;
     }
 }

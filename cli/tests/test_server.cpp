@@ -1,4 +1,3 @@
-#include <httplib.h>
 #include <thread>
 #include <doctest.h>
 #include "../server/server.h"

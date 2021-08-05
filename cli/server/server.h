@@ -1,6 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
-#include <httplib.h>
+
+#include <httplib_include_helper.h>
 #include <stdexcept>
 #include <collection_storage.h>
 #include "../path_utils.h"

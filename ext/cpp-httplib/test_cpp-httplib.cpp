@@ -1,5 +1,5 @@
 #include <doctest.h>
-#include "httplib.h"
+#include "httplib_include_helper.h"
 
 SCENARIO("Tests with file mounting") {
     GIVEN("A cpp-httplib server") {

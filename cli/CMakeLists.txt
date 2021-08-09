@@ -1,6 +1,5 @@
 set(MYLINK_COMMON_SOURCES
     cli.cpp
-    path_utils.cpp
     actions/add.cpp
     actions/server.cpp
     parser/parser_impl.cpp
@@ -10,7 +9,7 @@ set(MYLINK_COMMON_SOURCES
 
 
 add_executable(mylink main.cpp ${MYLINK_COMMON_SOURCES})
-target_link_libraries(mylink PRIVATE booklib argh cpp-httplib pthread json)
+target_link_libraries(mylink PRIVATE booklib envlib argh cpp-httplib pthread json)
 
 
 add_library(cli_tests OBJECT ${MYLINK_COMMON_SOURCES}

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <envlib.h>
 
 using namespace mylink;
 
@@ -34,7 +35,7 @@ bool lines_contain_string(const std::vector<std::string>& lines, const std::stri
 
 SCENARIO("Reading BookmarkCollections from a file") {
     GIVEN("A non-existing file") {
-        const std::string test_file = "/tmp/mylink_nonexisting";
+        const std::string test_file = mylink::utils::get_system_temporary_directory() + "mylink_nonexisting";
         std::remove(test_file.c_str());
 
         WHEN("I load the BookmarkCollection") {
@@ -46,7 +47,7 @@ SCENARIO("Reading BookmarkCollections from a file") {
     }
 
     GIVEN("A empty file") {
-        const std::string empty_file = "/tmp/mylink_empty";
+        const std::string empty_file = mylink::utils::get_system_temporary_directory() + "mylink_empty";
         std::ofstream{empty_file, std::ios_base::out | std::ios_base::trunc}; //Create file and write to it
 
         WHEN("I load the BookmarkCollection") {
@@ -58,7 +59,7 @@ SCENARIO("Reading BookmarkCollections from a file") {
     }
 
     GIVEN("A file containing different formats of bookmarks") {
-        const std::string test_file_name = "/tmp/mylink_testload";
+        const std::string test_file_name = mylink::utils::get_system_temporary_directory() + "mylink_testload";
         {
             std::ofstream test_file{test_file_name, std::ios_base::out | std::ios_base::trunc};
             test_file << "# My bookmarks\n";
@@ -94,7 +95,7 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
         const BookmarkCollection empty_collection;
 
         WHEN("I save the collection to a new file") {
-            const std::string test_file = "/tmp/mylink_save1";
+            const std::string test_file = mylink::utils::get_system_temporary_directory() + "mylink_save1";
             std::remove(test_file.c_str());
 
             MarkdownStorageBackend(test_file).save(empty_collection);
@@ -104,7 +105,7 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
             }
         }
         WHEN("I save the collection to an existing file") {
-            const std::string test_file = "/tmp/mylink_save1";
+            const std::string test_file = mylink::utils::get_system_temporary_directory() + "mylink_save1";
             write_string_to_file(test_file, "TEST TEST\n");
 
             MarkdownStorageBackend(test_file).save(empty_collection);
@@ -129,7 +130,7 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
         }
 
         WHEN("I write the BookmarkCollection to a empty file") {
-            const std::string test_file = "/tmp/mylink_save2";
+            const std::string test_file = mylink::utils::get_system_temporary_directory() + "mylink_save2";
             std::remove(test_file.c_str());
 
             MarkdownStorageBackend(test_file).save(collection);
@@ -145,7 +146,7 @@ SCENARIO("Writing BookmarkCollections to Markdown") {
         }
 
         WHEN("I write the BookmarkCollection to a non-empty file") {
-            const std::string test_file = "/tmp/mylink_save3";
+            const std::string test_file = mylink::utils::get_system_temporary_directory() + "mylink_save3";
             write_string_to_file(test_file, "TEST TEST\n");
 
             MarkdownStorageBackend(test_file).save(collection);

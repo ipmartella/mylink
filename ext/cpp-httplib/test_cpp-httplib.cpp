@@ -6,7 +6,11 @@ SCENARIO("Tests with file mounting") {
         httplib::Server server;
         WHEN("I try to mount a folder that exists") {
             THEN("I get true as a return value") {
+#if defined(_WIN32)
+                CHECK(server.set_mount_point("/", "C:\\"));
+#else
                 CHECK(server.set_mount_point("/", "/opt"));
+#endif
             }
         }
 

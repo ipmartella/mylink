@@ -20,6 +20,4 @@ target_include_directories(bookmark_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-add_custom_command(TARGET bookmark_tests PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${CMAKE_SOURCE_DIR}/www/ $<TARGET_FILE_DIR:bookmark_tests>/www)
+copy_www_with_target(bookmark_tests)

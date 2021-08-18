@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <array>
 
-#if defined(__linux__)
 std::string mylink::utils::get_current_executable_path() {
     constexpr const char* introspection_file = "/proc/self/exe";
     constexpr size_t buffer_size = 2048;
@@ -20,4 +19,8 @@ std::string mylink::utils::get_current_executable_path() {
         return std::string{buffer.data(), used};
     }
 }
-#endif
+
+std::string mylink::utils::get_system_temporary_directory() {
+    static std::string temporary_directory{"/tmp/"};
+    return temporary_directory;
+}

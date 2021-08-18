@@ -19,3 +19,7 @@ add_library(cli_tests OBJECT ${MYLINK_COMMON_SOURCES}
 target_link_libraries(cli_tests PRIVATE $<TARGET_PROPERTY:mylink,LINK_LIBRARIES> doctest)
 target_include_directories(cli_tests PUBLIC $<TARGET_PROPERTY:mylink,INCLUDE_DIRECTORIES>)
 target_compile_definitions(cli_tests PRIVATE MYLINK_TEST_IN_CODE)
+
+add_custom_command(TARGET mylink PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${CMAKE_SOURCE_DIR}/www/ $<TARGET_FILE_DIR:mylink>/www)

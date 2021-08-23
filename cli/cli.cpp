@@ -56,12 +56,16 @@ int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollect
 }
 
 std::string mylink::cli::basic_usage() {
-    return "Usage: mylink <command> [<args>]\n"
+    static const std::string usage =  \
+            "MyLink v" + std::to_string(MYLINK_VERSION_MAJOR) + "." + std::to_string(MYLINK_VERSION_MINOR) + "." + std::to_string(MYLINK_VERSION_PATCH) + "\n"
+           "Usage: mylink <command> [<args>]\n"
            "\n"
            "Available commands:\n"
            "add\tAdds a bookmark to a collection\n"
            "server\tMakes your MyLink collection available to web browsers\n"
            "\n";
+
+    return usage;
 }
 
 #ifdef MYLINK_TEST_IN_CODE

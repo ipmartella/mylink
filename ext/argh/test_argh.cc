@@ -20,6 +20,14 @@ TEST_CASE("CMD: short parameters") {
     CHECK_EQ(parser({"h", "header"}).str(), "My Github");
 }
 
+TEST_CASE("CMD: short parameters repeated") {
+    argh::parser parser;
+    parser.add_params({"-h", "--header"});
+    const char* argv[] = {"bookm", "add", "https://github.com/ipmart", "-h", "My Test", "-h", "My Github"};
+    parser.parse(7, argv);
+
+    CHECK_EQ(parser({"h", "header"}).str(), "My Test");
+}
 
 TEST_CASE("CMD: long parameters") {
     argh::parser parser;

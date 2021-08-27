@@ -24,6 +24,24 @@ public:
      */
     virtual BookmarkCollection load() = 0;
 
+    /**
+     * @brief Sets the storage path for this BookmarkCollectionStorageBackend.
+     *
+     * The meaning of the <path> depends on the specific backend.
+     *
+     * @param path Path to be used by this BookmarkCollectionStorageBackend.
+     */
+    virtual void set_path(const std::string& path) = 0;
+
+    /**
+     * @brief Gets the storage path for this BookmarkCollectionStorageBackend.
+     *
+     * The meaning of the <path> depends on the specific backend.
+     *
+     * @return the path used by this BookmarkCollectionStorageBackend.
+     */
+    virtual std::string get_path() const = 0;
+
     ~BookmarkCollectionStorageBackend() = default;
 };
 

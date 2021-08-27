@@ -150,6 +150,14 @@ BookmarkCollection MarkdownStorageBackend::load()
     return read_bookmarks_from_stream(stream);
 }
 
+std::string MarkdownStorageBackend::get_path() const {
+    return filepath_;
+}
+
+void MarkdownStorageBackend::set_path(const std::string &path) {
+    filepath_ = path;
+}
+
 
 #ifdef MYLINK_TEST_IN_CODE
 #include <doctest.h>

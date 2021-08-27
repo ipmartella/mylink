@@ -16,10 +16,14 @@ public:
     mylink::BookmarkCollection load() override;
     void reset();
 
+    void set_path(const std::string& path) override { path_ = path; }
+    std::string get_path() const override {return path_;}
+
     ~MockStorageBackend() = default;
 
 private:
     mylink::BookmarkCollection collection_;
+    std::string path_ = "";
 };
 
 } //namespace test

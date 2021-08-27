@@ -14,6 +14,8 @@ public:
 
     void save(const BookmarkCollection &collection) override;
     BookmarkCollection load() override;
+    void set_path(const std::string& path) override;
+    std::string get_path() const override;
 
 private:
     /**

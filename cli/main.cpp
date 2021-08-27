@@ -4,6 +4,6 @@
 
 int main(int argc, const char **argv)
 {
-    mylink::MarkdownStorageBackend backend("links.md");
+    mylink::MarkdownStorageBackend backend(mylink::cli::default_links_path);
     return mylink::cli::command_line_shell(argc, argv, backend);
 }

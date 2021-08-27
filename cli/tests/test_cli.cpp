@@ -105,8 +105,72 @@ SCENARIO("Add bookmark") {
                 CHECK(collection.contains("http://www.url1.org"));
                 CHECK_EQ(result.return_code, 0);
             }
+            AND_THEN("The collection is stored in 'links.md'") {
+                CHECK_EQ(result.backend.get_path(), default_links_path);
+            }
         }
     }
+
+    GIVEN("Command line: mylink add 'http://www.url1.org' -p temp.md") {
+        WHEN("I run the executable") {
+            auto result = run_mylink_with_args({"add", "http://www.url1.org", "-p", "temp.md"});
+
+            THEN("The stored collection contains http://www.url1.org") {
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(result.return_code, 0);
+            }
+            AND_THEN("The collection is stored in 'temp.md'") {
+                CHECK_EQ(result.backend.get_path(), "temp.md");
+            }
+        }
+    }
+
+    GIVEN("Command line: mylink add 'http://www.url1.org' --path temp.md") {
+        WHEN("I run the executable") {
+            auto result = run_mylink_with_args({"add", "http://www.url1.org", "--path", "temp.md"});
+
+            THEN("The stored collection contains http://www.url1.org") {
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(result.return_code, 0);
+            }
+            AND_THEN("The collection is stored in 'temp.md'") {
+                CHECK_EQ(result.backend.get_path(), "temp.md");
+            }
+        }
+    }
+
+    GIVEN("Command line: mylink add -p temp.md 'http://www.url1.org'") {
+        WHEN("I run the executable") {
+            auto result = run_mylink_with_args({"add", "-p", "temp.md", "http://www.url1.org"});
+
+            THEN("The stored collection contains http://www.url1.org and the backend points to temp.md") {
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(result.return_code, 0);
+            }
+            AND_THEN("The collection is stored in 'temp.md'") {
+                CHECK_EQ(result.backend.get_path(), "temp.md");
+            }
+        }
+    }
+
+    GIVEN("Command line: mylink add --path temp.md 'http://www.url1.org'") {
+        WHEN("I run the executable") {
+            auto result = run_mylink_with_args({"add", "--path", "temp.md", "http://www.url1.org"});
+
+            THEN("The stored collection contains http://www.url1.org and the backend points to temp.md") {
+                auto collection = result.backend.load();
+                CHECK(collection.contains("http://www.url1.org"));
+                CHECK_EQ(result.return_code, 0);
+            }
+            AND_THEN("The collection is stored in 'temp.md'") {
+                CHECK_EQ(result.backend.get_path(), "temp.md");
+            }
+        }
+    }
+
 
     GIVEN("Command line: mylink add 'http://www.url1.org' -t Title1") {
         WHEN("I run the executable") {
@@ -142,6 +206,7 @@ SCENARIO("Add bookmark") {
             }
         }
     }
+
 }
 
 SCENARIO("Run server") {

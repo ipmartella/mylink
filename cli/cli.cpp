@@ -1,5 +1,6 @@
 #include "cli.h"
 #include "actions.h"
+#include "parser/parser_impl.h"
 
 using namespace mylink;
 
@@ -54,6 +55,7 @@ int mylink::cli::command_line_shell(int argc, const char** argv, BookmarkCollect
 
     return 0;
 }
+
 
 std::string mylink::cli::basic_usage() {
     static const std::string usage =  \

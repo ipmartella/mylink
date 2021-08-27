@@ -3,6 +3,7 @@
 #include <iostream>
 #include "parser/parser_impl.h"
 #include <collection_storage.h>
+#include "cli.h"
 
 namespace mylink {
 namespace cli {

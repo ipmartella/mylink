@@ -1,16 +1,18 @@
 #include "../actions.h"
+#include "../actions_priv.h"
 
 using namespace mylink::cli;
 
 
 /**
- * @brief mylink "add" subcommand implementation
+ * @brief mylinks "add" subcommand implementation
  *
  * The "add" subcommand adds a Bookmark to the collection file, by parsing URL and metadata from the command line.
  * Command syntax is:
- * mylink add <url> [-h] [-t <title>]
+ * mylinks add <url> [-h] [-t <title>] [-p <path>]
  *
  * -h, --help			Show usage documentation and exits
+ * -p, --path <path>	File path where to store links. If not path is specified, 'links.md' will be used
  * -t, --title <title>	Adds <title> as title for the new Bookmark
  *
  * If a URL already exists in the collection, this command does nothing.
@@ -27,9 +29,10 @@ int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStora
 
     try {
         //Parse command line
-        const ParsedCommandLine cmd_line(argc, argv, {parameter_title});
+        const ParsedCommandLine cmd_line(argc, argv, {parameter_title, std_parameter_path});
         const std::string url = cmd_line.getPositional(positional_idx_url);
         const std::string title = cmd_line.getParameter(parameter_title, "");
+        backend.set_path(cmd_line.getParameter(std_parameter_path, default_links_path));
 
         //Add new Bookmark to collection
         auto collection = backend.load();
@@ -49,13 +52,14 @@ int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStora
 
 
 std::string mylink::cli::action_add_usage() {
-    return "Usage: mylink add <url> [--title <title>]\n"
+    return "Usage: mylink add <url> [--title <title>] [--path <path]\n"
            "\n"
            "Adds <url> to the default bookmark collection file\n"
            "\n"
             "Options:\n"
-            "\t-h,--help			Show usage documentation and exits"
-            "\t-t,--title <title>	Sets bookmark title to <title>"
+            "\t-h,--help			Show usage documentation and exits\n"
+            "\t-p,--path			File path where to store links. If not path is specified, 'links.md' will be used\n"
+            "\t-t,--title <title>	Sets bookmark title to <title>\n"
             "\n"
             ;
 }

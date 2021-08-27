@@ -22,7 +22,7 @@ auto get_parameter(argh::parser& parser, const CommandLineParameter& parameter, 
 }
 
 auto get_flag(argh::parser& parser, const CommandLineFlag& flag) {
-    if(flag.has_long_version()) {
+    if(!flag.has_long_version()) {
         return parser[flag.get_short_version()];
     } else {
         return parser[{flag.get_short_version().c_str(), flag.get_long_version().c_str()}];

@@ -34,6 +34,10 @@ int mylink::cli::action_add(int argc, const char** argv, BookmarkCollectionStora
         const std::string title = cmd_line.getParameter(parameter_title, "");
         backend.set_path(cmd_line.getParameter(std_parameter_path, default_links_path));
 
+        if(cmd_line.hasFlag(std_flag_help)) {
+            throw std::invalid_argument{"Help requested"};
+        }
+
         //Add new Bookmark to collection
         auto collection = backend.load();
         collection.add(Bookmark{url, title});

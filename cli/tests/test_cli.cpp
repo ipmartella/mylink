@@ -206,6 +206,14 @@ SCENARIO("Add bookmark") {
             }
         }
     }
+    GIVEN("Command line: mylink add -h") {
+        WHEN("I run the executable") {
+            auto result = run_mylink_with_args({"add", "-h"});
+            THEN("The usage string for 'add' is printed") {
+                CHECK_EQ(result.output, action_add_usage());
+            }
+        }
+    }
 
 }
 

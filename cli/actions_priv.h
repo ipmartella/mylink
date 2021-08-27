@@ -7,6 +7,7 @@ namespace mylink {
 namespace cli {
 
 const CommandLineParameter std_parameter_path{"-p", "--path"};
+const CommandLineFlag std_flag_help{"-h", "--help"};
 
 
 } //namespace cli

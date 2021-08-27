@@ -227,6 +227,20 @@ SCENARIO("Run server") {
                 REQUIRE_EQ(wait_result, std::future_status::ready);
                 auto result = future_result.get();
                 CHECK_EQ(result.output, action_server_usage());
+                CHECK_EQ(result.backend.get_path(), default_links_path);
+            }
+        }
+    }
+
+    GIVEN("Command line: mylink server -p test.md") {
+        WHEN("I run the executable") {
+            auto future_result = std::async(std::launch::async, run_mylink_with_args, std::vector<std::string>{"server", "-p", "test.md"}, BookmarkCollection());
+            std::this_thread::sleep_for(50ms);
+
+            THEN("The backend points to 'test.md'") {
+                client.Get(server_url_stop.c_str());
+                auto result = future_result.get();
+                CHECK_EQ(result.backend.get_path(), "test.md");
             }
         }
     }

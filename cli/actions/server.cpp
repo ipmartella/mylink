@@ -49,8 +49,8 @@ std::string mylink::cli::action_server_usage() {
            "Starts a webserver so that the MyLink collection is accessible through the browser\n"
            "\n"
             "Options:\n"
-            "\t-h,--help			Show usage documentation and exits\n"
-            "\t-p,--path			File path where to store links. If not path is specified, 'links.md' will be used\n"
+            "\t-h,--help            Show usage documentation and exits\n"
+            "\t-p,--path <path>     File path where to store links. If not path is specified, 'links.md' will be used\n"
             "\n"
             ;
 }

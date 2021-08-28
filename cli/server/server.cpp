@@ -48,7 +48,7 @@ Server::Server(BookmarkCollectionStorageBackend &backend) : backend_{backend}, h
         stop();
     });
 
-    //Load Web resources to show MyLinks web page
+    //Load Web resources to show MyLink web page
     const bool web_resources_ok = http_server_.set_mount_point("/", server_web_resources_path.c_str());
     if(!web_resources_ok) {
         throw mylink::ServerSetupError{};

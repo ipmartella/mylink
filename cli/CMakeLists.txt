@@ -9,7 +9,10 @@ set(MYLINK_COMMON_SOURCES
 
 
 add_executable(mylink main.cpp ${MYLINK_COMMON_SOURCES})
-target_link_libraries(mylink PRIVATE booklib envlib argh cpp-httplib pthread json)
+target_link_libraries(mylink PRIVATE mylinklib envlib argh cpp-httplib json)
+if(CMAKE_HOST_UNIX)
+    target_link_libraries(mylink PRIVATE pthread)
+endif()
 
 
 add_library(cli_tests OBJECT ${MYLINK_COMMON_SOURCES}

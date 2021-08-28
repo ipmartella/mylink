@@ -5,11 +5,11 @@ using namespace mylink::cli;
 
 
 /**
- * @brief mylinks "add" subcommand implementation
+ * @brief mylink "add" subcommand implementation
  *
  * The "add" subcommand adds a Bookmark to the collection file, by parsing URL and metadata from the command line.
  * Command syntax is:
- * mylinks add <url> [-h] [-t <title>] [-p <path>]
+ * mylink add <url> [-h] [-t <title>] [-p <path>]
  *
  * -h, --help			Show usage documentation and exits
  * -p, --path <path>	File path where to store links. If not path is specified, 'links.md' will be used
@@ -61,9 +61,9 @@ std::string mylink::cli::action_add_usage() {
            "Adds <url> to the default bookmark collection file\n"
            "\n"
             "Options:\n"
-            "\t-h,--help			Show usage documentation and exits\n"
-            "\t-p,--path			File path where to store links. If not path is specified, 'links.md' will be used\n"
-            "\t-t,--title <title>	Sets bookmark title to <title>\n"
+            "\t-h,--help            Show usage documentation and exits\n"
+            "\t-p,--path <path>     File path where to store links. If not path is specified, 'links.md' will be used\n"
+            "\t-t,--title <title>   Sets bookmark title to <title>\n"
             "\n"
             ;
 }

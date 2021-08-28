@@ -6,6 +6,7 @@ MyLink is built for people who want full control over their data.
 Your link collection is stored as a single plain-text file using the Markdown syntax, so you can read and edit it using any plain-text software you are familiar with (grep, awk, sed, emacs, vim, Notepad++, etc.) on any operating system.
 
 # Features
+MyLink version 0.1.0:
 * Add links to your collection as URLs (with optional title) using the `mylink add` command
 * Access your link collection directly from your favorite web browser using the `mylink server` command
 * Add a webpage to your collection straight from your web browser using the integrated bookmarklet
@@ -45,16 +46,6 @@ If you want to use a different file, use the `-p <path>` command line option.
   
 Then browse to `http://localhost:1234/mylink.html`, and you will see a list of your bookmarks/links.
 The webpage contains also a [bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet) to add a webpage to your MyLink collection.
-
-# Install
-## Prerequisites
-For the time being, MyLink only works on Linux (Windows support is on the way).
-
-## Steps
-1. Download the latest prebuilt version from the [release page](https://github.com/ipmartella/mylink/releases)
-2. Extract the archive to a folder of your choice
-3. Run `mylink -h` to check available commands
-
 
 # Build
 ## Prerequisites
